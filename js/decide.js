@@ -55,7 +55,6 @@
     return `<div class="period-strip"></div>
       ${media}
       <div class="dname">${d.name}</div>
-      <div class="meta"><span class="badge">${d.period}</span> · ${d.diet}</div>
       ${statBlock}`;
   }
 
