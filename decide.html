@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fdf6e9" />
+  <title>DinoDecide — higher or lower?</title>
+  <meta name="description" content="Higher or lower with dinosaurs. Guess which prehistoric beast wins on weight, teeth, speed, brain power and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
+      <a class="iconbtn" href="index.html" title="Menu">🏠</a>
+    </div>
+
+    <!-- mode select -->
+    <div id="mode-select">
+      <div class="hero" style="padding-bottom:0">
+        <h1 style="font-size:30px">⚖️ DinoDecide</h1>
+        <p>Which dinosaur wins? Guess <b>higher</b> or <b>lower</b>.</p>
+      </div>
+      <div class="modecard">
+        <h2>Choose a mode</h2>
+        <p>New comparisons every round — weight, teeth, speed, brain power, eggs and more.</p>
+        <button class="bigbtn daily" id="btn-daily">Daily Challenge
+          <small>10 rounds · same for everyone today · shareable</small></button>
+        <button class="bigbtn endless" id="btn-endless">Endless Streak
+          <small>keep going until you slip up</small></button>
+      </div>
+      <div class="footer">Ties never happen — the two dinosaurs always differ on the stat shown.</div>
+    </div>
+
+    <!-- game -->
+    <div id="game" class="game hidden">
+      <div class="scorebar" id="scorebar">
+        <span class="pill"><span id="score-label">Streak</span>: <b id="score-val">0</b></span>
+        <span class="pill">Best: <b id="best-val">0</b></span>
+      </div>
+      <div class="dots hidden" id="dots"></div>
+      <div class="prompt" id="prompt"></div>
+      <div class="arena">
+        <div class="dino" id="left"></div>
+        <div class="vs">VS</div>
+        <div class="dino" id="right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- results overlay -->
+  <div id="overlay" class="overlay hidden">
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/decide.js"></script>
+</body>
+</html>
