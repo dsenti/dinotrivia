@@ -102,6 +102,7 @@ ${css}
       <span class="pill">Best: <b id="best-val">0</b></span>
     </div>
     <div class="dots hidden" id="dots"></div>
+    <div class="daily-cat hidden" id="daily-cat"></div>
     <div class="prompt" id="prompt"></div>
     <div class="arena">
       <div class="dino" id="left"></div>

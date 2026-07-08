@@ -99,6 +99,7 @@
     // — otherwise we'd reveal a null value for it.
     let usableStats = STATS.filter(s => withStat(s.key).length >= 2);
     if (left0) usableStats = usableStats.filter(s => has(left0, s.key));
+    if (opts.statKey) usableStats = usableStats.filter(s => s.key === opts.statKey); // fixed category (daily)
     if (!usableStats.length) return null;
     for (let tries = 0; tries < 500; tries++) {
       const stat = pick(rng, usableStats);

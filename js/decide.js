@@ -19,7 +19,8 @@
     left: $("#left"),
     right: $("#right"),
     overlay: $("#overlay"),
-    sheet: $("#sheet")
+    sheet: $("#sheet"),
+    dailyCat: $("#daily-cat")
   };
 
   const LS = {
@@ -115,6 +116,7 @@
     state = { streak: 0 };
     els.scoreLabel.textContent = "Streak";
     els.dots.classList.add("hidden");
+    if (els.dailyCat) els.dailyCat.classList.add("hidden");
     els.bestVal.parentElement.classList.remove("hidden");
     els.bestVal.textContent = getBest();
     els.scoreVal.textContent = "0";
@@ -155,6 +157,16 @@
 
   // ---------- DAILY ----------
   const DAILY_ROUNDS = 10;
+  // Categories varied enough to fill a 10-round day without feeling repetitive.
+  // (Brain EQ, eggs and fingers have too few dinosaurs / distinct values to
+  //  carry a whole daily on their own, so they only appear in endless mode.)
+  const DAILY_STAT_KEYS = ["weight", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
+
+  function pickDailyStat(rng) {
+    const elig = E.STATS.filter(s => DAILY_STAT_KEYS.indexOf(s.key) !== -1 && E.withStat(s.key).length >= 10);
+    return elig[Math.floor(rng() * elig.length)].key;
+  }
+
   function startDaily() {
     mode = "daily";
     const today = new Date();
@@ -163,13 +175,26 @@
     if (saved && saved.done) { showDailyResult(seed, saved.results, today); return; }
 
     const rng = E.makeRng(seed);
-    const rounds = [];
-    for (let i = 0; i < DAILY_ROUNDS; i++) rounds.push(E.makeRound(rng));
-    state = { seed, rounds, idx: 0, results: [], date: today };
+    const statKey = pickDailyStat(rng);          // one fixed category for everyone today
+    const rounds = [], seen = new Set();
+    let guard = 0;
+    while (rounds.length < DAILY_ROUNDS && guard++ < 800) {
+      const r = E.makeRound(rng, { statKey });
+      if (!r) break;
+      const k = [r.left.name, r.right.name].sort().join("|");
+      if (seen.has(k)) continue;                 // avoid repeating the same pairing
+      seen.add(k); rounds.push(r);
+    }
+    while (rounds.length < DAILY_ROUNDS) { const r = E.makeRound(rng, { statKey }); if (!r) break; rounds.push(r); }
+    state = { seed, rounds, idx: 0, results: [], date: today, statKey };
 
     els.scoreLabel.textContent = "Round";
     els.bestVal.parentElement.classList.add("hidden");
     els.dots.classList.remove("hidden");
+    if (els.dailyCat) {
+      els.dailyCat.textContent = "Today's category · " + E.STAT_BY_KEY[statKey].noun;
+      els.dailyCat.classList.remove("hidden");
+    }
     renderDots();
     showGame();
     nextDaily();
@@ -208,6 +233,7 @@
   }
 
   function showDailyResult(seed, results, date) {
+    if (els.dailyCat) els.dailyCat.classList.add("hidden");
     const score = results.filter(Boolean).length;
     const grid = results.map(r => (r ? "🟩" : "🟥")).join("");
     const dstr = fmtDate(date || new Date());

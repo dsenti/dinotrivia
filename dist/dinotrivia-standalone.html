@@ -161,6 +161,12 @@ body {
 }
 .scorebar .pill b { color: var(--amber-d); }
 
+.daily-cat {
+  align-self: center; margin: 0 auto 8px;
+  background: var(--amber); color: #fff; font-weight: 700; font-size: 13px;
+  letter-spacing: .02em; padding: 5px 14px; border-radius: 999px;
+  box-shadow: 0 3px 0 var(--amber-d);
+}
 .prompt { text-align: center; font-size: 16.5px; color: var(--ink-soft); margin-bottom: 8px; min-height: 22px; }
 .prompt b { color: var(--ink); }
 
@@ -177,17 +183,20 @@ body {
 .period-Cretaceous .period-strip { background: var(--cretaceous); }
 .dino-img {
   width: 100%;
-  height: clamp(112px, 19vh, 188px);
+  height: clamp(120px, 21vh, 200px);
   border-radius: 13px;
   overflow: hidden;
   margin-bottom: 8px;
+  padding: 10px 12px;               /* breathing room so the whole animal shows */
   display: grid; place-items: center;
   /* a soft "diorama" sky→ground panel so white-cutout art and full scenes
      both sit comfortably, in light and dark themes */
   background: linear-gradient(180deg, #dfeaf1 0%, #eef1e6 55%, #e7ddc7 100%);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
 }
-.dino-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* max-width/height (not width/height:100%) keeps the full image visible and
+   never lets it overflow the padded panel */
+.dino-img img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 .dino .silhouette { font-size: 54px; line-height: 1; }
 .dino .dname { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; }
 .dino .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
@@ -311,6 +320,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); ou
       <span class="pill">Best: <b id="best-val">0</b></span>
     </div>
     <div class="dots hidden" id="dots"></div>
+    <div class="daily-cat hidden" id="daily-cat"></div>
     <div class="prompt" id="prompt"></div>
     <div class="arena">
       <div class="dino" id="left"></div>
@@ -441,6 +451,7 @@ window.__spa = {
     // — otherwise we'd reveal a null value for it.
     let usableStats = STATS.filter(s => withStat(s.key).length >= 2);
     if (left0) usableStats = usableStats.filter(s => has(left0, s.key));
+    if (opts.statKey) usableStats = usableStats.filter(s => s.key === opts.statKey); // fixed category (daily)
     if (!usableStats.length) return null;
     for (let tries = 0; tries < 500; tries++) {
       const stat = pick(rng, usableStats);
@@ -485,7 +496,8 @@ window.__spa = {
     left: $("#left"),
     right: $("#right"),
     overlay: $("#overlay"),
-    sheet: $("#sheet")
+    sheet: $("#sheet"),
+    dailyCat: $("#daily-cat")
   };
 
   const LS = {
@@ -581,6 +593,7 @@ window.__spa = {
     state = { streak: 0 };
     els.scoreLabel.textContent = "Streak";
     els.dots.classList.add("hidden");
+    if (els.dailyCat) els.dailyCat.classList.add("hidden");
     els.bestVal.parentElement.classList.remove("hidden");
     els.bestVal.textContent = getBest();
     els.scoreVal.textContent = "0";
@@ -621,6 +634,16 @@ window.__spa = {
 
   // ---------- DAILY ----------
   const DAILY_ROUNDS = 10;
+  // Categories varied enough to fill a 10-round day without feeling repetitive.
+  // (Brain EQ, eggs and fingers have too few dinosaurs / distinct values to
+  //  carry a whole daily on their own, so they only appear in endless mode.)
+  const DAILY_STAT_KEYS = ["weight", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
+
+  function pickDailyStat(rng) {
+    const elig = E.STATS.filter(s => DAILY_STAT_KEYS.indexOf(s.key) !== -1 && E.withStat(s.key).length >= 10);
+    return elig[Math.floor(rng() * elig.length)].key;
+  }
+
   function startDaily() {
     mode = "daily";
     const today = new Date();
@@ -629,13 +652,26 @@ window.__spa = {
     if (saved && saved.done) { showDailyResult(seed, saved.results, today); return; }
 
     const rng = E.makeRng(seed);
-    const rounds = [];
-    for (let i = 0; i < DAILY_ROUNDS; i++) rounds.push(E.makeRound(rng));
-    state = { seed, rounds, idx: 0, results: [], date: today };
+    const statKey = pickDailyStat(rng);          // one fixed category for everyone today
+    const rounds = [], seen = new Set();
+    let guard = 0;
+    while (rounds.length < DAILY_ROUNDS && guard++ < 800) {
+      const r = E.makeRound(rng, { statKey });
+      if (!r) break;
+      const k = [r.left.name, r.right.name].sort().join("|");
+      if (seen.has(k)) continue;                 // avoid repeating the same pairing
+      seen.add(k); rounds.push(r);
+    }
+    while (rounds.length < DAILY_ROUNDS) { const r = E.makeRound(rng, { statKey }); if (!r) break; rounds.push(r); }
+    state = { seed, rounds, idx: 0, results: [], date: today, statKey };
 
     els.scoreLabel.textContent = "Round";
     els.bestVal.parentElement.classList.add("hidden");
     els.dots.classList.remove("hidden");
+    if (els.dailyCat) {
+      els.dailyCat.textContent = "Today's category · " + E.STAT_BY_KEY[statKey].noun;
+      els.dailyCat.classList.remove("hidden");
+    }
     renderDots();
     showGame();
     nextDaily();
@@ -674,6 +710,7 @@ window.__spa = {
   }
 
   function showDailyResult(seed, results, date) {
+    if (els.dailyCat) els.dailyCat.classList.add("hidden");
     const score = results.filter(Boolean).length;
     const grid = results.map(r => (r ? "🟩" : "🟥")).join("");
     const dstr = fmtDate(date || new Date());
