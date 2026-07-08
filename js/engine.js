@@ -49,17 +49,35 @@
     return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
   }
 
+  const slugify = n => n.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
   let DINOS = [];
-  function ingest(json) {
-    DINOS = json.dinosaurs.map(d => Object.assign({ silhouette: silhouette(d) }, d));
+  let CREDITS = [];
+  function ingest(json, credits) {
+    CREDITS = credits || [];
+    const byName = {};
+    CREDITS.forEach(c => (byName[c.name] = c));
+    DINOS = json.dinosaurs.map(d => {
+      const c = byName[d.name];
+      const images = global.DINO_IMAGES || null; // slug -> data URI (single-file build)
+      const s = slugify(d.name);
+      return Object.assign({
+        slug: s,
+        silhouette: silhouette(d),
+        image: images ? (images[s] || null) : (c ? c.file : null),
+        credit: c || null
+      }, d);
+    });
     return DINOS;
   }
   function load() {
-    // single-file build inlines data as window.DINO_JSON; multi-file fetches it.
-    if (global.DINO_JSON) return Promise.resolve(ingest(global.DINO_JSON));
-    return fetch("data/dinosaurs.json", { cache: "no-cache" })
-      .then(r => r.json())
-      .then(ingest);
+    // single-file build inlines data (DINO_JSON), images (DINO_IMAGES) and
+    // credits (DINO_CREDITS); multi-file fetches the JSON files.
+    if (global.DINO_JSON) return Promise.resolve(ingest(global.DINO_JSON, global.DINO_CREDITS));
+    return Promise.all([
+      fetch("data/dinosaurs.json", { cache: "no-cache" }).then(r => r.json()),
+      fetch("assets/dino/credits.json", { cache: "no-cache" }).then(r => r.json()).catch(() => [])
+    ]).then(([json, credits]) => ingest(json, credits));
   }
 
   // Which dinos have a usable (non-null) value for a stat.
@@ -74,11 +92,18 @@
      `right` (to avoid immediate repeats). Uses rejection sampling. */
   function makeRound(rng, opts) {
     opts = opts || {};
-    const usableStats = STATS.filter(s => withStat(s.key).length >= 2);
-    for (let tries = 0; tries < 400; tries++) {
+    const left0 = opts.forcedLeft || null;
+    const has = (d, key) => d[key] !== null && d[key] !== undefined;
+    // Candidate stats must have >=2 dinos overall AND, if the left card is
+    // fixed (endless chain), be a stat that fixed dino actually has a value for
+    // — otherwise we'd reveal a null value for it.
+    let usableStats = STATS.filter(s => withStat(s.key).length >= 2);
+    if (left0) usableStats = usableStats.filter(s => has(left0, s.key));
+    if (!usableStats.length) return null;
+    for (let tries = 0; tries < 500; tries++) {
       const stat = pick(rng, usableStats);
       const pool = withStat(stat.key);
-      const left = opts.forcedLeft || pick(rng, pool);
+      const left = left0 || pick(rng, pool);
       const right = pick(rng, pool);
       if (right.name === left.name) continue;
       if (right[stat.key] === left[stat.key]) continue; // never a tie
@@ -89,7 +114,8 @@
   }
 
   global.DinoEngine = {
-    STATS, STAT_BY_KEY, load, withStat, makeRound, makeRng, dateSeed, silhouette,
-    get all() { return DINOS; }
+    STATS, STAT_BY_KEY, load, withStat, makeRound, makeRng, dateSeed, silhouette, slugify,
+    get all() { return DINOS; },
+    get credits() { return CREDITS; }
   };
 })(window);

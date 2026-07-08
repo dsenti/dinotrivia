@@ -1,9 +1,12 @@
 #!/usr/bin/env node
-/* Bundle the site into one self-contained HTML file (inline CSS/JS/data)
-   for offline play or easy sharing. Output: dist/dinotrivia-standalone.html
-   Run:  node tools/build-standalone.js  */
+/* Bundle the whole site into ONE self-contained HTML file: inline CSS, JS,
+   dinosaur data, image credits, and every reconstruction image as a data URI
+   (downscaled for size). Output: dist/dinotrivia-standalone.html
+   Run:  node tools/build-standalone.js         */
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
+const { execFileSync } = require("child_process");
 const R = path.resolve(__dirname, "..");
 const read = f => fs.readFileSync(path.join(R, f), "utf8");
 
@@ -11,6 +14,25 @@ const css = read("css/style.css");
 const engine = read("js/engine.js");
 const decide = read("js/decide.js");
 const data = JSON.parse(read("data/dinosaurs.json"));
+const credits = JSON.parse(read("assets/dino/credits.json"));
+
+// Inline each image as a data URI, re-scaled to ~340px wide to keep the file lean.
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "dino-art-"));
+const images = {};
+let inlined = 0;
+for (const c of credits) {
+  const srcSmall = path.join(R, "assets/dino/small", path.basename(c.file));
+  const src = fs.existsSync(srcSmall) ? srcSmall : path.join(R, c.file);
+  if (!fs.existsSync(src)) continue;
+  const out = path.join(tmpDir, c.slug + "." + c.ext);
+  try { execFileSync("sips", ["-Z", "340", src, "--out", out], { stdio: "ignore" }); }
+  catch (e) { fs.copyFileSync(src, out); }
+  const b64 = fs.readFileSync(out).toString("base64");
+  const mime = c.ext === "png" ? "image/png" : "image/jpeg";
+  images[c.slug] = `data:${mime};base64,${b64}`;
+  inlined++;
+}
+fs.rmSync(tmpDir, { recursive: true, force: true });
 
 const page = `<!DOCTYPE html>
 <html lang="en">
@@ -20,6 +42,15 @@ const page = `<!DOCTYPE html>
 <title>DinoTrivia — DinoDecide</title>
 <style>
 ${css}
+/* standalone credits view */
+#credits .credits { background: var(--card); border: 1px solid var(--card-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 6px 2px; margin-top: 10px; }
+#credits ul { list-style: none; margin: 0; padding: 0; }
+#credits li { display: flex; gap: 11px; align-items: center; padding: 9px 13px; border-bottom: 1px solid var(--card-line); }
+#credits li:last-child { border-bottom: none; }
+#credits li img { width: 50px; height: 38px; object-fit: contain; border-radius: 8px; background: linear-gradient(180deg,#dfeaf1,#e7ddc7); flex: none; }
+#credits .c-name { font-weight: 700; font-size: 14.5px; }
+#credits .c-meta { font-size: 12px; color: var(--ink-soft); line-height: 1.35; }
+#credits a { color: var(--cretaceous); }
 </style>
 </head>
 <body>
@@ -46,7 +77,7 @@ ${css}
       <div class="tile soon"><span class="emoji">🏆</span><span class="name">DinoRankle</span><span class="desc">Put five dinosaurs in the right order.</span><span class="tag soon">Soon</span></div>
       <div class="tile soon"><span class="emoji">🔗</span><span class="name">DinoConnect</span><span class="desc">Find the hidden groups.</span><span class="tag soon">Soon</span></div>
     </div>
-    <div class="footer">Made for dino fans · stats are approximate paleontological estimates</div>
+    <div class="footer">Made for dino fans · stats are approximate paleontological estimates<br /><a href="#" class="to-credits">Image credits</a></div>
   </div>
 
   <div id="mode-select" class="hidden">
@@ -62,7 +93,7 @@ ${css}
       <button class="bigbtn endless" id="btn-endless">Endless Streak
         <small>keep going until you slip up</small></button>
     </div>
-    <div class="footer">Ties never happen — the two dinosaurs always differ on the stat shown.</div>
+    <div class="footer">Ties never happen — the two dinosaurs always differ on the stat shown.<br /><a href="#" class="to-credits">Image credits</a></div>
   </div>
 
   <div id="game" class="game hidden">
@@ -78,17 +109,26 @@ ${css}
       <div class="dino" id="right"></div>
     </div>
   </div>
+
+  <div id="credits" class="hidden">
+    <div class="hero" style="padding-bottom:2px"><h1 style="font-size:24px">Image credits</h1></div>
+    <p class="footer" style="margin-top:0">Life reconstructions from Wikimedia Commons, used under their free licenses. Thanks to the paleoartists.</p>
+    <div class="credits"><ul id="credits-list"></ul></div>
+    <div class="footer"><a href="#" id="credits-back">← Back</a></div>
+  </div>
 </div>
 
 <div id="overlay" class="overlay hidden"><div class="sheet" id="sheet"></div></div>
 
 <script>window.DINO_JSON = ${JSON.stringify(data)};</script>
+<script>window.DINO_CREDITS = ${JSON.stringify(credits)};</script>
+<script>window.DINO_IMAGES = ${JSON.stringify(images)};</script>
 <script>
-window.__spa = { home: function () {
-  ["overlay","game","mode-select"].forEach(function(id){ document.getElementById(id).classList.add("hidden"); });
-  document.getElementById("hub").classList.remove("hidden");
-  window.scrollTo(0,0);
-}};
+window.__spa = {
+  _hideAll: function(){ ["overlay","game","mode-select","credits","hub"].forEach(function(id){ document.getElementById(id).classList.add("hidden"); }); },
+  home: function(){ this._hideAll(); document.getElementById("hub").classList.remove("hidden"); window.scrollTo(0,0); },
+  credits: function(){ this._hideAll(); document.getElementById("credits").classList.remove("hidden"); window.scrollTo(0,0); }
+};
 </script>
 <script>
 ${engine}
@@ -106,6 +146,20 @@ ${decide}
   document.getElementById("tile-decide").addEventListener("click", toDecide);
   document.getElementById("home-btn").addEventListener("click", function(){ window.__spa.home(); });
   document.getElementById("brand").addEventListener("click", function(e){ e.preventDefault(); window.__spa.home(); });
+  document.getElementById("credits-back").addEventListener("click", function(e){ e.preventDefault(); window.__spa.home(); });
+  Array.prototype.forEach.call(document.querySelectorAll(".to-credits"), function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); window.__spa.credits(); });
+  });
+  // render credits list from inlined data
+  var list = document.getElementById("credits-list");
+  var cs = (window.DINO_CREDITS || []).slice().sort(function(a,b){ return a.name.localeCompare(b.name); });
+  list.innerHTML = cs.map(function(c){
+    var img = (window.DINO_IMAGES||{})[c.slug] || "";
+    return '<li><img src="' + img + '" alt="" />' +
+      '<div><div class="c-name">' + c.name + '</div>' +
+      '<div class="c-meta">' + (c.artist ? c.artist + " · " : "") + c.license +
+      ' · <a href="' + c.source + '" target="_blank" rel="noopener">source</a></div></div></li>';
+  }).join("");
 })();
 </script>
 </body>
@@ -115,4 +169,4 @@ const outDir = path.join(R, "dist");
 fs.mkdirSync(outDir, { recursive: true });
 const out = path.join(outDir, "dinotrivia-standalone.html");
 fs.writeFileSync(out, page);
-console.log("Wrote " + out + " (" + page.length + " bytes)");
+console.log(`Wrote ${out}\n  ${(page.length/1024/1024).toFixed(2)} MB, ${inlined} images inlined`);

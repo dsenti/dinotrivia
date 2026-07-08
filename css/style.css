@@ -168,7 +168,20 @@ body {
 .period-Triassic  .period-strip { background: var(--triassic); }
 .period-Jurassic  .period-strip { background: var(--jurassic); }
 .period-Cretaceous .period-strip { background: var(--cretaceous); }
-.dino .silhouette { font-size: 44px; line-height: 1; margin-bottom: 2px; }
+.dino-img {
+  width: 100%;
+  height: clamp(112px, 19vh, 188px);
+  border-radius: 13px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  display: grid; place-items: center;
+  /* a soft "diorama" sky→ground panel so white-cutout art and full scenes
+     both sit comfortably, in light and dark themes */
+  background: linear-gradient(180deg, #dfeaf1 0%, #eef1e6 55%, #e7ddc7 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+.dino-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.dino .silhouette { font-size: 54px; line-height: 1; }
 .dino .dname { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; }
 .dino .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
 .badge { font-weight: 700; color: var(--ink-soft); }

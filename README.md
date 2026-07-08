@@ -39,3 +39,20 @@ published paleontological estimates chosen so the *relative order* is trustworth
 for a trivia game. `null` means a stat isn't confidently documented for that
 dinosaur — it's simply never used in a comparison involving it (no invented numbers).
 This dataset is the shared foundation for future games.
+
+## Images
+
+Each dinosaur shows a **life reconstruction** (paleoart), stored in `assets/dino/`
+(full size) and `assets/dino/small/` (thumbnails). They are fetched from Wikimedia
+Commons by `tools/fetch-images.js`, which prefers the curated "life restorations"
+categories and rejects skeletons, skulls, size charts and maps. Every image is
+free-licensed; attribution (artist, license, source) is recorded in
+`assets/dino/credits.json` and shown on `credits.html`.
+
+To refresh images: `node tools/fetch-images.js`.
+
+## Single-file build
+
+`node tools/build-standalone.js` bundles the whole site — CSS, JS, data, credits
+and every image (inlined as data URIs) — into `dist/dinotrivia-standalone.html`,
+a single self-contained file that runs offline or from anywhere.

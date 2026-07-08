@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ecefe4" />
+  <title>Image credits — DinoTrivia</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦕</text></svg>" />
+  <style>
+    .credits { background: var(--card); border: 1px solid var(--card-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 8px 4px; margin-top: 12px; }
+    .credits ul { list-style: none; margin: 0; padding: 0; }
+    .credits li { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--card-line); }
+    .credits li:last-child { border-bottom: none; }
+    .credits img { width: 54px; height: 40px; object-fit: contain; border-radius: 8px; background: linear-gradient(180deg,#dfeaf1,#e7ddc7); flex: none; }
+    .credits .c-name { font-weight: 700; font-size: 15px; }
+    .credits .c-meta { font-size: 12.5px; color: var(--ink-soft); line-height: 1.35; }
+    .credits a { color: var(--cretaceous); }
+    .intro { color: var(--ink-soft); font-size: 14px; line-height: 1.5; text-align: center; padding: 0 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
+      <a class="iconbtn" href="index.html" title="Home">🏠</a>
+    </div>
+    <div class="hero" style="padding-bottom:4px">
+      <h1 style="font-size:26px">Image credits</h1>
+    </div>
+    <p class="intro">Dinosaur life reconstructions are from Wikimedia Commons, used under their respective free licenses. Thank you to the paleoartists. Click any name to view the original file and full license.</p>
+    <div class="credits"><ul id="list"><li>Loading…</li></ul></div>
+    <div class="footer"><a href="index.html">← Back to games</a></div>
+  </div>
+  <script>
+    fetch("assets/dino/credits.json").then(r => r.json()).then(credits => {
+      credits.sort((a, b) => a.name.localeCompare(b.name));
+      document.getElementById("list").innerHTML = credits.map(c => `
+        <li>
+          <img src="${c.file}" alt="" loading="lazy" />
+          <div>
+            <div class="c-name">${c.name}</div>
+            <div class="c-meta">${c.artist ? c.artist + " · " : ""}${c.license}
+              · <a href="${c.source}" target="_blank" rel="noopener">source</a></div>
+          </div>
+        </li>`).join("");
+    }).catch(() => { document.getElementById("list").innerHTML = "<li>Could not load credits.</li>"; });
+  </script>
+</body>
+</html>

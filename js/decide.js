@@ -50,8 +50,11 @@
     } else {
       statBlock = "";
     }
+    const media = d.image
+      ? `<div class="dino-img"><img src="${d.image}" alt="Life reconstruction of ${d.name}" loading="lazy" decoding="async" onerror="this.parentNode.innerHTML='<span class=&quot;silhouette&quot;>${d.silhouette}</span>'" /></div>`
+      : `<div class="dino-img"><span class="silhouette">${d.silhouette}</span></div>`;
     return `<div class="period-strip"></div>
-      <div class="silhouette">${d.silhouette}</div>
+      ${media}
       <div class="dname">${d.name}</div>
       <div class="meta"><span class="badge">${d.period}</span> · ${d.diet}</div>
       ${statBlock}`;
@@ -127,7 +130,8 @@
       if (state.streak > getBest()) { setBest(state.streak); els.bestVal.textContent = state.streak; }
       setTimeout(() => {
         // challenger becomes the new anchor
-        const next = E.makeRound(Math.random, { forcedLeft: round.right, avoid: new Set([round.left.name]) });
+        const next = E.makeRound(Math.random, { forcedLeft: round.right, avoid: new Set([round.left.name]) })
+          || E.makeRound(Math.random);
         renderRound(next);
       }, 1150);
     } else {
