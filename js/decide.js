@@ -3,6 +3,9 @@
   "use strict";
   const E = window.DinoEngine;
   const $ = sel => document.querySelector(sel);
+  // In the single-file SPA build, window.__spa.home() returns to the hub view.
+  // In the multi-file site there is no SPA, so navigate to the hub page.
+  const goHome = () => { if (window.__spa && window.__spa.home) window.__spa.home(); else location.href = "index.html"; };
 
   const els = {
     modeSelect: $("#mode-select"),
@@ -143,7 +146,7 @@
       <button class="bigbtn daily" id="tohub">Back to menu</button>`;
     openOverlay();
     $("#again").addEventListener("click", () => { closeOverlay(); startEndless(); });
-    $("#tohub").addEventListener("click", () => location.href = "index.html");
+    $("#tohub").addEventListener("click", () => goHome());
   }
 
   // ---------- DAILY ----------
@@ -219,7 +222,7 @@
     showGame(); // ensure game container visible behind overlay
     $("#share").addEventListener("click", () => doShare(shareText));
     $("#endless").addEventListener("click", () => { closeOverlay(); startEndless(); });
-    $("#tohub").addEventListener("click", () => location.href = "index.html");
+    $("#tohub").addEventListener("click", () => goHome());
   }
 
   function doShare(text) {
@@ -240,6 +243,8 @@
 
   // ---------- UI helpers ----------
   function showGame() {
+    const hub = $("#hub");
+    if (hub) hub.classList.add("hidden");
     els.modeSelect.classList.add("hidden");
     els.game.classList.remove("hidden");
   }

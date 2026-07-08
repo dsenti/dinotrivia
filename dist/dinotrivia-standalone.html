@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>DinoTrivia — DinoDecide</title>
+<style>
+/* ============================================================
+   DinoTrivia — visual identity: "geologic time"
+   Neutral is bone with a faint fern bias (not AI cream). The three
+   periods drive the accent system: Triassic rust, Jurassic fern,
+   Cretaceous river. Amber is the single action colour.
+   Light + dark themes via tokens.
+   ============================================================ */
+:root {
+  --bg: #ecefe4;
+  --bg-2: #e3e8d7;
+  --band: rgba(63,155,109,0.05);
+  --ink: #211d17;
+  --ink-soft: #6d6858;
+  --card: #fbfcf7;
+  --card-line: #e6e8dc;
+  --shadow: 0 6px 0 rgba(40,35,20,0.06), 0 16px 30px rgba(60,55,25,0.14);
+
+  --triassic: #c8592a;
+  --jurassic: #2f9b64;
+  --cretaceous: #2f7fc4;
+
+  --good: #35a457;   --good-d: #23823f;
+  --bad:  #df4f3d;   --bad-d:  #b23327;
+  --amber: #f2a41c;  --amber-d: #c67e0c;
+
+  --radius: 20px;
+  --maxw: 520px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171a;
+    --bg-2: #191d1c;
+    --band: rgba(90,180,130,0.04);
+    --ink: #eef1e8;
+    --ink-soft: #9ea698;
+    --card: #21262a;
+    --card-line: #2d343a;
+    --shadow: 0 6px 0 rgba(0,0,0,0.25), 0 18px 32px rgba(0,0,0,0.45);
+    --triassic: #e5713f;
+    --jurassic: #43b87b;
+    --cretaceous: #4f9ede;
+  }
+}
+/* explicit toggle wins over OS in both directions */
+:root[data-theme="light"] {
+  --bg: #ecefe4; --bg-2: #e3e8d7; --band: rgba(63,155,109,0.05);
+  --ink: #211d17; --ink-soft: #6d6858; --card: #fbfcf7; --card-line: #e6e8dc;
+  --shadow: 0 6px 0 rgba(40,35,20,0.06), 0 16px 30px rgba(60,55,25,0.14);
+  --triassic: #c8592a; --jurassic: #2f9b64; --cretaceous: #2f7fc4;
+}
+:root[data-theme="dark"] {
+  --bg: #14171a; --bg-2: #191d1c; --band: rgba(90,180,130,0.04);
+  --ink: #eef1e8; --ink-soft: #9ea698; --card: #21262a; --card-line: #2d343a;
+  --shadow: 0 6px 0 rgba(0,0,0,0.25), 0 18px 32px rgba(0,0,0,0.45);
+  --triassic: #e5713f; --jurassic: #43b87b; --cretaceous: #4f9ede;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  color: var(--ink);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 38px, var(--band) 38px 39px),
+    radial-gradient(130% 100% at 50% 0%, var(--bg-2) 0%, var(--bg) 60%);
+  background-attachment: fixed;
+  min-height: 100vh; min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.tnum { font-variant-numeric: tabular-nums; }
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 14px 16px 28px;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column;
+}
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.brand {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 21px; letter-spacing: -0.02em;
+  color: var(--ink); text-decoration: none;
+}
+.brand .logo { font-size: 25px; }
+.brand b { color: var(--amber-d); }
+.iconbtn {
+  border: none; background: var(--card); color: var(--ink);
+  width: 42px; height: 42px; border-radius: 50%;
+  font-size: 19px; cursor: pointer; display: grid; place-items: center;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.12); border: 1px solid var(--card-line);
+}
+.iconbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
+
+/* ---------- hero / hub ---------- */
+.hero { text-align: center; padding: 16px 8px 4px; }
+.hero .eyebrow {
+  text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px;
+  font-weight: 600; color: var(--ink-soft);
+}
+.hero h1 { font-size: 32px; margin: 4px 0 2px; text-wrap: balance; letter-spacing: -0.02em; }
+.hero p { color: var(--ink-soft); margin: 2px 0; font-size: 15.5px; }
+
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-top: 18px; }
+.tile {
+  background: var(--card); border: 1px solid var(--card-line);
+  border-radius: var(--radius); padding: 18px 14px;
+  text-decoration: none; color: var(--ink);
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  transition: transform .08s ease; position: relative; overflow: hidden;
+}
+.tile::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px;
+  background: linear-gradient(90deg, var(--triassic), var(--jurassic), var(--cretaceous)); }
+.tile.soon::before { opacity: .35; }
+.tile:active { transform: translateY(3px); }
+.tile .emoji { font-size: 38px; margin-top: 4px; }
+.tile .name { font-weight: 700; font-size: 18px; margin-top: 6px; letter-spacing: -0.01em; }
+.tile .desc { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.3; }
+.tile.soon { opacity: .58; }
+.tag {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: #fff; background: var(--amber); padding: 3px 9px; border-radius: 999px; margin-top: 9px;
+}
+.tag.soon { background: var(--ink-soft); }
+
+/* ---------- mode select ---------- */
+.modecard {
+  background: var(--card); border: 1px solid var(--card-line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px 18px; text-align: center; margin-top: 10px;
+}
+.modecard h2 { margin: 0 0 4px; font-size: 22px; }
+.modecard p { color: var(--ink-soft); margin: 0 0 16px; font-size: 14.5px; line-height: 1.4; }
+.bigbtn {
+  display: block; width: 100%; border: none; cursor: pointer;
+  font-family: inherit; font-weight: 700; font-size: 18px; color: #fff;
+  padding: 15px; border-radius: 15px; margin-bottom: 11px; letter-spacing: -0.01em;
+}
+.bigbtn small { display: block; font-weight: 500; font-size: 12.5px; opacity: .92; margin-top: 2px; }
+.bigbtn.daily { background: var(--amber); box-shadow: 0 5px 0 var(--amber-d); }
+.bigbtn.endless { background: var(--cretaceous); box-shadow: 0 5px 0 rgba(0,0,0,.28); }
+.bigbtn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.2); }
+
+/* ---------- game ---------- */
+.game { flex: 1; display: flex; flex-direction: column; }
+.scorebar { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 10px; font-weight: 700; }
+.scorebar .pill {
+  background: var(--card); border: 1px solid var(--card-line);
+  border-radius: 999px; padding: 6px 14px; box-shadow: 0 3px 0 rgba(0,0,0,.08); font-size: 14.5px;
+}
+.scorebar .pill b { color: var(--amber-d); }
+
+.prompt { text-align: center; font-size: 16.5px; color: var(--ink-soft); margin-bottom: 8px; min-height: 22px; }
+.prompt b { color: var(--ink); }
+
+.arena { display: flex; flex-direction: column; gap: 11px; flex: 1; }
+.dino {
+  background: var(--card); border: 1px solid var(--card-line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 16px; text-align: center; position: relative; overflow: hidden;
+  flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 128px;
+}
+.dino .period-strip { position: absolute; top: 0; left: 0; right: 0; height: 6px; background: var(--ink-soft); }
+.period-Triassic  .period-strip { background: var(--triassic); }
+.period-Jurassic  .period-strip { background: var(--jurassic); }
+.period-Cretaceous .period-strip { background: var(--cretaceous); }
+.dino .silhouette { font-size: 44px; line-height: 1; margin-bottom: 2px; }
+.dino .dname { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; }
+.dino .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+.badge { font-weight: 700; color: var(--ink-soft); }
+.period-Triassic  .badge { color: var(--triassic); }
+.period-Jurassic  .badge { color: var(--jurassic); }
+.period-Cretaceous .badge { color: var(--cretaceous); }
+
+.statline { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.statval { font-size: 30px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.statval .unit { font-size: 14px; font-weight: 500; color: var(--ink-soft); }
+
+.vs {
+  align-self: center; background: var(--ink); color: var(--card);
+  width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 700; font-size: 14px; margin: -3px 0; z-index: 2;
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+.guessrow { display: flex; gap: 10px; margin-top: 12px; }
+.guess {
+  flex: 1; border: none; cursor: pointer; font-family: inherit;
+  font-weight: 700; font-size: 16.5px; color: #fff; padding: 14px 8px; border-radius: 13px;
+}
+.guess.higher { background: var(--good); box-shadow: 0 4px 0 var(--good-d); }
+.guess.lower  { background: var(--bad);  box-shadow: 0 4px 0 var(--bad-d); }
+.guess:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.2); }
+.guess:disabled { opacity: .5; }
+
+.dino.correct { animation: pop .5s ease; box-shadow: 0 0 0 3px var(--good), var(--shadow); }
+.dino.wrong   { animation: shake .5s ease; box-shadow: 0 0 0 3px var(--bad), var(--shadow); }
+@keyframes pop { 0%,100% { transform: scale(1);} 35% { transform: scale(1.02);} }
+@keyframes shake { 0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 40%{transform:translateX(8px);} 60%{transform:translateX(-6px);} 80%{transform:translateX(6px);} }
+@media (prefers-reduced-motion: reduce) { .dino.correct,.dino.wrong{animation:none;} }
+
+.dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 8px; flex-wrap: wrap; }
+.dot { width: 13px; height: 13px; border-radius: 50%; background: var(--card-line); }
+.dot.correct { background: var(--good); }
+.dot.wrong { background: var(--bad); }
+.dot.current { outline: 3px solid var(--amber); outline-offset: 1px; }
+
+/* ---------- overlay ---------- */
+.overlay { position: fixed; inset: 0; background: rgba(20,15,8,.55); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50; }
+.sheet {
+  background: var(--card); border: 1px solid var(--card-line);
+  border-radius: 24px; padding: 24px 20px; width: 100%; max-width: 420px; text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,.4); animation: rise .25s ease;
+}
+@media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }
+@keyframes rise { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sheet h2 { margin: 0 0 4px; font-size: 24px; }
+.sheet .big { font-size: 50px; font-weight: 700; color: var(--amber-d); margin: 4px 0; font-variant-numeric: tabular-nums; }
+.sheet p { color: var(--ink-soft); margin: 6px 0; }
+.emojigrid { font-size: 23px; letter-spacing: 3px; margin: 12px 0; }
+.sheet .bigbtn { margin-top: 6px; }
+.streaknote { font-size: 13.5px; color: var(--ink-soft); }
+
+.footer { text-align: center; color: var(--ink-soft); font-size: 11.5px; margin-top: 18px; line-height: 1.5; }
+.footer a { color: var(--ink-soft); }
+
+button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); outline-offset: 2px; }
+.hidden { display: none !important; }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="#" id="brand"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
+    <button class="iconbtn" id="home-btn" title="Menu" aria-label="Menu">🏠</button>
+  </div>
+
+  <div id="hub">
+    <div class="hero">
+      <div class="eyebrow">Triassic · Jurassic · Cretaceous</div>
+      <h1>Daily Dino Games 🦖</h1>
+      <p>Test what you really know about the prehistoric world.</p>
+    </div>
+    <div class="tiles">
+      <a class="tile" href="#" id="tile-decide">
+        <span class="emoji">⚖️</span>
+        <span class="name">DinoDecide</span>
+        <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
+        <span class="tag">Play now</span>
+      </a>
+      <div class="tile soon"><span class="emoji">🔤</span><span class="name">Dinodle</span><span class="desc">Guess the daily mystery dinosaur.</span><span class="tag soon">Soon</span></div>
+      <div class="tile soon"><span class="emoji">🏆</span><span class="name">DinoRankle</span><span class="desc">Put five dinosaurs in the right order.</span><span class="tag soon">Soon</span></div>
+      <div class="tile soon"><span class="emoji">🔗</span><span class="name">DinoConnect</span><span class="desc">Find the hidden groups.</span><span class="tag soon">Soon</span></div>
+    </div>
+    <div class="footer">Made for dino fans · stats are approximate paleontological estimates</div>
+  </div>
+
+  <div id="mode-select" class="hidden">
+    <div class="hero" style="padding-bottom:0">
+      <h1 style="font-size:29px">⚖️ DinoDecide</h1>
+      <p>Which dinosaur wins? Guess <b>higher</b> or <b>lower</b>.</p>
+    </div>
+    <div class="modecard">
+      <h2>Choose a mode</h2>
+      <p>New comparisons every round — weight, teeth, speed, brain power, eggs and more.</p>
+      <button class="bigbtn daily" id="btn-daily">Daily Challenge
+        <small>10 rounds · same for everyone today · shareable</small></button>
+      <button class="bigbtn endless" id="btn-endless">Endless Streak
+        <small>keep going until you slip up</small></button>
+    </div>
+    <div class="footer">Ties never happen — the two dinosaurs always differ on the stat shown.</div>
+  </div>
+
+  <div id="game" class="game hidden">
+    <div class="scorebar" id="scorebar">
+      <span class="pill"><span id="score-label">Streak</span>: <b id="score-val">0</b></span>
+      <span class="pill">Best: <b id="best-val">0</b></span>
+    </div>
+    <div class="dots hidden" id="dots"></div>
+    <div class="prompt" id="prompt"></div>
+    <div class="arena">
+      <div class="dino" id="left"></div>
+      <div class="vs">VS</div>
+      <div class="dino" id="right"></div>
+    </div>
+  </div>
+</div>
+
+<div id="overlay" class="overlay hidden"><div class="sheet" id="sheet"></div></div>
+
+<script>window.DINO_JSON = {"_note":"Stats are approximate published paleontological estimates suitable for a trivia game. Values are relative-order-accurate for well-known dinosaurs. null = not confidently documented for that dinosaur, and that stat is simply never used in a comparison involving it. mya = midpoint of the genus's known time range in millions of years ago (higher = lived earlier/longer ago).","dinosaurs":[{"name":"Tyrannosaurus","diet":"carnivore","period":"Cretaceous","mya":67,"weight":8000,"length":12,"yearNamed":1905,"teeth":60,"topSpeed":27,"eq":2.4,"fingers":2,"eggClutch":null,"fossilSpecimens":50},{"name":"Triceratops","diet":"herbivore","period":"Cretaceous","mya":67,"weight":8000,"length":9,"yearNamed":1889,"teeth":800,"topSpeed":30,"eq":0.7,"fingers":5,"eggClutch":null,"fossilSpecimens":50},{"name":"Velociraptor","diet":"carnivore","period":"Cretaceous","mya":74,"weight":15,"length":2,"yearNamed":1924,"teeth":28,"topSpeed":40,"eq":1.5,"fingers":3,"eggClutch":null,"fossilSpecimens":12},{"name":"Stegosaurus","diet":"herbivore","period":"Jurassic","mya":152,"weight":3800,"length":9,"yearNamed":1877,"teeth":40,"topSpeed":7,"eq":0.6,"fingers":5,"eggClutch":null,"fossilSpecimens":80},{"name":"Brachiosaurus","diet":"herbivore","period":"Jurassic","mya":154,"weight":40000,"length":22,"yearNamed":1903,"teeth":52,"topSpeed":15,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Spinosaurus","diet":"carnivore","period":"Cretaceous","mya":97,"weight":7400,"length":15,"yearNamed":1915,"teeth":64,"topSpeed":24,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Allosaurus","diet":"carnivore","period":"Jurassic","mya":152,"weight":2000,"length":9,"yearNamed":1877,"teeth":70,"topSpeed":40,"eq":1,"fingers":3,"eggClutch":null,"fossilSpecimens":60},{"name":"Diplodocus","diet":"herbivore","period":"Jurassic","mya":152,"weight":15000,"length":26,"yearNamed":1878,"teeth":60,"topSpeed":10,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Ankylosaurus","diet":"herbivore","period":"Cretaceous","mya":67,"weight":6000,"length":8,"yearNamed":1908,"teeth":72,"topSpeed":10,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Parasaurolophus","diet":"herbivore","period":"Cretaceous","mya":75,"weight":2500,"length":10,"yearNamed":1922,"teeth":600,"topSpeed":25,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":null},{"name":"Iguanodon","diet":"herbivore","period":"Cretaceous","mya":125,"weight":3000,"length":10,"yearNamed":1825,"teeth":100,"topSpeed":24,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Compsognathus","diet":"carnivore","period":"Jurassic","mya":150,"weight":3,"length":1,"yearNamed":1859,"teeth":68,"topSpeed":40,"eq":null,"fingers":2,"eggClutch":null,"fossilSpecimens":null},{"name":"Gallimimus","diet":"omnivore","period":"Cretaceous","mya":70,"weight":440,"length":6,"yearNamed":1972,"teeth":0,"topSpeed":56,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Deinonychus","diet":"carnivore","period":"Cretaceous","mya":110,"weight":73,"length":3,"yearNamed":1969,"teeth":70,"topSpeed":40,"eq":1.5,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Archaeopteryx","diet":"carnivore","period":"Jurassic","mya":150,"weight":1,"length":0.5,"yearNamed":1861,"teeth":50,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":12},{"name":"Oviraptor","diet":"omnivore","period":"Cretaceous","mya":75,"weight":33,"length":2,"yearNamed":1924,"teeth":0,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":22,"fossilSpecimens":null},{"name":"Maiasaura","diet":"herbivore","period":"Cretaceous","mya":76,"weight":3000,"length":9,"yearNamed":1979,"teeth":500,"topSpeed":null,"eq":null,"fingers":4,"eggClutch":34,"fossilSpecimens":null},{"name":"Therizinosaurus","diet":"herbivore","period":"Cretaceous","mya":70,"weight":5000,"length":10,"yearNamed":1954,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Carnotaurus","diet":"carnivore","period":"Cretaceous","mya":71,"weight":1500,"length":8,"yearNamed":1985,"teeth":null,"topSpeed":48,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":1},{"name":"Giganotosaurus","diet":"carnivore","period":"Cretaceous","mya":98,"weight":8000,"length":13,"yearNamed":1995,"teeth":null,"topSpeed":31,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Utahraptor","diet":"carnivore","period":"Cretaceous","mya":135,"weight":300,"length":5,"yearNamed":1993,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Microraptor","diet":"carnivore","period":"Cretaceous","mya":120,"weight":1,"length":0.8,"yearNamed":2000,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":300},{"name":"Apatosaurus","diet":"herbivore","period":"Jurassic","mya":152,"weight":23000,"length":23,"yearNamed":1877,"teeth":null,"topSpeed":10,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Pachycephalosaurus","diet":"herbivore","period":"Cretaceous","mya":67,"weight":450,"length":4.5,"yearNamed":1943,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Dilophosaurus","diet":"carnivore","period":"Jurassic","mya":193,"weight":400,"length":6,"yearNamed":1970,"teeth":null,"topSpeed":30,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":null},{"name":"Coelophysis","diet":"carnivore","period":"Triassic","mya":210,"weight":20,"length":3,"yearNamed":1889,"teeth":null,"topSpeed":40,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":1000},{"name":"Plateosaurus","diet":"herbivore","period":"Triassic","mya":214,"weight":1500,"length":8,"yearNamed":1837,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":100},{"name":"Herrerasaurus","diet":"carnivore","period":"Triassic","mya":231,"weight":210,"length":4,"yearNamed":1963,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Eoraptor","diet":"omnivore","period":"Triassic","mya":231,"weight":10,"length":1,"yearNamed":1993,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Baryonyx","diet":"carnivore","period":"Cretaceous","mya":125,"weight":1700,"length":9,"yearNamed":1986,"teeth":96,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Troodon","diet":"omnivore","period":"Cretaceous","mya":75,"weight":50,"length":2.4,"yearNamed":1856,"teeth":122,"topSpeed":null,"eq":5.8,"fingers":3,"eggClutch":24,"fossilSpecimens":null},{"name":"Ornithomimus","diet":"omnivore","period":"Cretaceous","mya":70,"weight":170,"length":3.8,"yearNamed":1890,"teeth":0,"topSpeed":60,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Protoceratops","diet":"herbivore","period":"Cretaceous","mya":75,"weight":180,"length":2,"yearNamed":1923,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":12,"fossilSpecimens":100},{"name":"Edmontosaurus","diet":"herbivore","period":"Cretaceous","mya":70,"weight":4000,"length":12,"yearNamed":1917,"teeth":1000,"topSpeed":45,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":20},{"name":"Ceratosaurus","diet":"carnivore","period":"Jurassic","mya":150,"weight":800,"length":6,"yearNamed":1884,"teeth":null,"topSpeed":null,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":null},{"name":"Megalosaurus","diet":"carnivore","period":"Jurassic","mya":166,"weight":1000,"length":7,"yearNamed":1824,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Mamenchisaurus","diet":"herbivore","period":"Jurassic","mya":155,"weight":30000,"length":25,"yearNamed":1954,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Argentinosaurus","diet":"herbivore","period":"Cretaceous","mya":94,"weight":75000,"length":35,"yearNamed":1993,"teeth":null,"topSpeed":5,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Nigersaurus","diet":"herbivore","period":"Cretaceous","mya":110,"weight":4000,"length":9,"yearNamed":1999,"teeth":500,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Suchomimus","diet":"carnivore","period":"Cretaceous","mya":112,"weight":3800,"length":11,"yearNamed":1998,"teeth":122,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Sinosauropteryx","diet":"carnivore","period":"Cretaceous","mya":125,"weight":1,"length":1,"yearNamed":1996,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Gorgosaurus","diet":"carnivore","period":"Cretaceous","mya":76,"weight":2500,"length":9,"yearNamed":1914,"teeth":null,"topSpeed":null,"eq":null,"fingers":2,"eggClutch":null,"fossilSpecimens":null},{"name":"Albertosaurus","diet":"carnivore","period":"Cretaceous","mya":71,"weight":1700,"length":9,"yearNamed":1905,"teeth":null,"topSpeed":null,"eq":null,"fingers":2,"eggClutch":null,"fossilSpecimens":null},{"name":"Tarbosaurus","diet":"carnivore","period":"Cretaceous","mya":70,"weight":5000,"length":10,"yearNamed":1955,"teeth":null,"topSpeed":null,"eq":null,"fingers":2,"eggClutch":null,"fossilSpecimens":null},{"name":"Psittacosaurus","diet":"herbivore","period":"Cretaceous","mya":123,"weight":20,"length":2,"yearNamed":1923,"teeth":null,"topSpeed":null,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":400},{"name":"Pentaceratops","diet":"herbivore","period":"Cretaceous","mya":75,"weight":5000,"length":6,"yearNamed":1923,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Camarasaurus","diet":"herbivore","period":"Jurassic","mya":150,"weight":20000,"length":18,"yearNamed":1877,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Corythosaurus","diet":"herbivore","period":"Cretaceous","mya":76,"weight":3000,"length":9,"yearNamed":1914,"teeth":600,"topSpeed":null,"eq":null,"fingers":4,"eggClutch":null,"fossilSpecimens":null},{"name":"Styracosaurus","diet":"herbivore","period":"Cretaceous","mya":75,"weight":3000,"length":5.5,"yearNamed":1913,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Kentrosaurus","diet":"herbivore","period":"Jurassic","mya":152,"weight":700,"length":4.5,"yearNamed":1915,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Dreadnoughtus","diet":"herbivore","period":"Cretaceous","mya":76,"weight":55000,"length":26,"yearNamed":2014,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Yutyrannus","diet":"carnivore","period":"Cretaceous","mya":125,"weight":1400,"length":9,"yearNamed":2012,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":3},{"name":"Brontosaurus","diet":"herbivore","period":"Jurassic","mya":152,"weight":15000,"length":22,"yearNamed":1879,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Ouranosaurus","diet":"herbivore","period":"Cretaceous","mya":110,"weight":2200,"length":8,"yearNamed":1976,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Sauropelta","diet":"herbivore","period":"Cretaceous","mya":110,"weight":1500,"length":5,"yearNamed":1970,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Concavenator","diet":"carnivore","period":"Cretaceous","mya":130,"weight":400,"length":6,"yearNamed":2010,"teeth":null,"topSpeed":null,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":1},{"name":"Struthiomimus","diet":"omnivore","period":"Cretaceous","mya":72,"weight":150,"length":4.3,"yearNamed":1917,"teeth":0,"topSpeed":60,"eq":null,"fingers":3,"eggClutch":null,"fossilSpecimens":null},{"name":"Torosaurus","diet":"herbivore","period":"Cretaceous","mya":67,"weight":6000,"length":8,"yearNamed":1891,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null},{"name":"Sauroposeidon","diet":"herbivore","period":"Cretaceous","mya":110,"weight":40000,"length":28,"yearNamed":2000,"teeth":null,"topSpeed":null,"eq":null,"fingers":5,"eggClutch":null,"fossilSpecimens":null}]};</script>
+<script>
+window.__spa = { home: function () {
+  ["overlay","game","mode-select"].forEach(function(id){ document.getElementById(id).classList.add("hidden"); });
+  document.getElementById("hub").classList.remove("hidden");
+  window.scrollTo(0,0);
+}};
+</script>
+<script>
+/* DinoTrivia shared engine: data, stat config, seeded RNG, pair selection.
+   Kept generic so future games (Dinodle, DinoRankle) reuse the same dataset. */
+(function (global) {
+  "use strict";
+
+  // Silhouette emoji by rough group — playful, not scientific.
+  const DIET_EMOJI = { carnivore: "🦖", herbivore: "🦕", omnivore: "🦴" };
+  function silhouette(d) {
+    if (d.name === "Stegosaurus" || d.name === "Kentrosaurus") return "🦕";
+    if (d.name === "Triceratops" || d.name === "Torosaurus" || d.name === "Pentaceratops") return "🦏";
+    if (d.name === "Archaeopteryx" || d.name === "Microraptor") return "🐦";
+    return DIET_EMOJI[d.diet] || "🦖";
+  }
+
+  // Each comparable stat. `dir:"desc"` means a bigger raw number = the
+  // "more/earlier/first" end; we always ask the player HIGHER or LOWER on the
+  // displayed number, so direction only affects wording, not scoring.
+  const STATS = [
+    { key: "weight", label: "heavier", noun: "weight", unit: "kg", fmt: v => fmtNum(v) },
+    { key: "mya", label: "older (lived earlier)", noun: "age", unit: "million yrs ago", fmt: v => fmtNum(v) },
+    { key: "yearNamed", label: "named more recently", noun: "year first named", unit: "", fmt: v => String(v) },
+    { key: "teeth", label: "more teeth", noun: "number of teeth", unit: "teeth", fmt: v => fmtNum(v) },
+    { key: "topSpeed", label: "faster", noun: "top speed", unit: "km/h", fmt: v => fmtNum(v) },
+    { key: "eq", label: "brainier", noun: "brain power (EQ)", unit: "EQ", fmt: v => v.toFixed(1) },
+    { key: "fingers", label: "more fingers", noun: "fingers per hand", unit: "fingers", fmt: v => String(v) },
+    { key: "eggClutch", label: "more eggs", noun: "eggs per clutch", unit: "eggs", fmt: v => String(v) },
+    { key: "fossilSpecimens", label: "more fossils found", noun: "fossils discovered", unit: "specimens", fmt: v => fmtNum(v) }
+  ];
+  const STAT_BY_KEY = {};
+  STATS.forEach(s => (STAT_BY_KEY[s.key] = s));
+
+  function fmtNum(v) {
+    if (v >= 1000) return v.toLocaleString("en-US");
+    return String(v);
+  }
+
+  // --- seeded PRNG (mulberry32) so a given seed always yields the same run ---
+  function makeRng(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function dateSeed(d) {
+    // d: JS Date -> integer YYYYMMDD
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  }
+
+  let DINOS = [];
+  function ingest(json) {
+    DINOS = json.dinosaurs.map(d => Object.assign({ silhouette: silhouette(d) }, d));
+    return DINOS;
+  }
+  function load() {
+    // single-file build inlines data as window.DINO_JSON; multi-file fetches it.
+    if (global.DINO_JSON) return Promise.resolve(ingest(global.DINO_JSON));
+    return fetch("data/dinosaurs.json", { cache: "no-cache" })
+      .then(r => r.json())
+      .then(ingest);
+  }
+
+  // Which dinos have a usable (non-null) value for a stat.
+  function withStat(key) {
+    return DINOS.filter(d => d[key] !== null && d[key] !== undefined);
+  }
+
+  const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
+
+  /* Build one round: {stat, left, right} where left & right have DIFFERENT
+     values for stat (never a tie). Optionally exclude a set of names from
+     `right` (to avoid immediate repeats). Uses rejection sampling. */
+  function makeRound(rng, opts) {
+    opts = opts || {};
+    const usableStats = STATS.filter(s => withStat(s.key).length >= 2);
+    for (let tries = 0; tries < 400; tries++) {
+      const stat = pick(rng, usableStats);
+      const pool = withStat(stat.key);
+      const left = opts.forcedLeft || pick(rng, pool);
+      const right = pick(rng, pool);
+      if (right.name === left.name) continue;
+      if (right[stat.key] === left[stat.key]) continue; // never a tie
+      if (opts.avoid && opts.avoid.has(right.name)) continue;
+      return { stat: stat, left: left, right: right };
+    }
+    return null; // should never happen with this dataset
+  }
+
+  global.DinoEngine = {
+    STATS, STAT_BY_KEY, load, withStat, makeRound, makeRng, dateSeed, silhouette,
+    get all() { return DINOS; }
+  };
+})(window);
+
+</script>
+<script>
+/* DinoDecide — higher/lower game (endless + daily). */
+(function () {
+  "use strict";
+  const E = window.DinoEngine;
+  const $ = sel => document.querySelector(sel);
+  // In the single-file SPA build, window.__spa.home() returns to the hub view.
+  // In the multi-file site there is no SPA, so navigate to the hub page.
+  const goHome = () => { if (window.__spa && window.__spa.home) window.__spa.home(); else location.href = "index.html"; };
+
+  const els = {
+    modeSelect: $("#mode-select"),
+    game: $("#game"),
+    scorebar: $("#scorebar"),
+    scoreVal: $("#score-val"),
+    scoreLabel: $("#score-label"),
+    bestVal: $("#best-val"),
+    dots: $("#dots"),
+    prompt: $("#prompt"),
+    left: $("#left"),
+    right: $("#right"),
+    overlay: $("#overlay"),
+    sheet: $("#sheet")
+  };
+
+  const LS = {
+    best: "dinodecide.best",
+    daily: seed => "dinodecide.daily." + seed
+  };
+  const getBest = () => parseInt(localStorage.getItem(LS.best) || "0", 10);
+  const setBest = v => localStorage.setItem(LS.best, String(v));
+
+  let mode = null;      // "endless" | "daily"
+  let state = null;     // per-mode state
+
+  // ---------- rendering a dino card ----------
+  function cardHTML(d, opts) {
+    opts = opts || {};
+    const stat = opts.stat;
+    let statBlock;
+    if (opts.reveal) {
+      statBlock = `<div class="statline">${stat.noun}</div>
+        <div class="statval">${stat.fmt(d[stat.key])} <span class="unit">${stat.unit}</span></div>`;
+    } else if (opts.hidden) {
+      statBlock = `<div class="statline">${stat.noun}</div>
+        <div class="statval">?</div>
+        <div class="guessrow">
+          <button class="guess higher" data-guess="higher">Higher ⬆</button>
+          <button class="guess lower" data-guess="lower">Lower ⬇</button>
+        </div>`;
+    } else {
+      statBlock = "";
+    }
+    return `<div class="period-strip"></div>
+      <div class="silhouette">${d.silhouette}</div>
+      <div class="dname">${d.name}</div>
+      <div class="meta"><span class="badge">${d.period}</span> · ${d.diet}</div>
+      ${statBlock}`;
+  }
+
+  function renderRound(round, opts) {
+    opts = opts || {};
+    els.left.className = "dino period-" + round.left.period;
+    els.right.className = "dino period-" + round.right.period;
+    els.left.innerHTML = cardHTML(round.left, { stat: round.stat, reveal: true });
+    els.right.innerHTML = cardHTML(round.right, { stat: round.stat, hidden: true });
+    els.prompt.innerHTML = `Which had <b>${round.stat.label}</b>?`;
+    bindGuess(round);
+  }
+
+  function bindGuess(round) {
+    els.right.querySelectorAll(".guess").forEach(btn => {
+      btn.addEventListener("click", () => onGuess(round, btn.dataset.guess));
+    });
+  }
+
+  function tweenValue(el, stat, target) {
+    const dur = 650, start = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = target * eased;
+      const shown = stat.key === "eq" ? val.toFixed(1) : stat.fmt(Math.round(val));
+      el.innerHTML = `${shown} <span class="unit">${stat.unit}</span>`;
+      if (t < 1) requestAnimationFrame(step);
+      else el.innerHTML = `${stat.fmt(target)} <span class="unit">${stat.unit}</span>`;
+    }
+    requestAnimationFrame(step);
+  }
+
+  function onGuess(round, guess) {
+    els.right.querySelectorAll(".guess").forEach(b => (b.disabled = true));
+    const correctDir = round.right[round.stat.key] > round.left[round.stat.key] ? "higher" : "lower";
+    const correct = guess === correctDir;
+
+    // reveal challenger value
+    els.right.innerHTML = cardHTML(round.right, { stat: round.stat, reveal: true });
+    const valEl = els.right.querySelector(".statval");
+    if (round.stat.key === "yearNamed") {
+      valEl.innerHTML = `${round.stat.fmt(round.right[round.stat.key])} <span class="unit">${round.stat.unit}</span>`;
+    } else {
+      tweenValue(valEl, round.stat, round.right[round.stat.key]);
+    }
+    els.right.classList.add(correct ? "correct" : "wrong");
+
+    if (mode === "endless") endlessResult(round, correct);
+    else dailyResult(round, correct);
+  }
+
+  // ---------- ENDLESS ----------
+  function startEndless() {
+    mode = "endless";
+    state = { streak: 0 };
+    els.scoreLabel.textContent = "Streak";
+    els.dots.classList.add("hidden");
+    els.bestVal.parentElement.classList.remove("hidden");
+    els.bestVal.textContent = getBest();
+    els.scoreVal.textContent = "0";
+    showGame();
+    const round = E.makeRound(Math.random);
+    renderRound(round);
+  }
+
+  function endlessResult(round, correct) {
+    if (correct) {
+      state.streak++;
+      els.scoreVal.textContent = state.streak;
+      if (state.streak > getBest()) { setBest(state.streak); els.bestVal.textContent = state.streak; }
+      setTimeout(() => {
+        // challenger becomes the new anchor
+        const next = E.makeRound(Math.random, { forcedLeft: round.right, avoid: new Set([round.left.name]) });
+        renderRound(next);
+      }, 1150);
+    } else {
+      setTimeout(() => endlessOver(), 1150);
+    }
+  }
+
+  function endlessOver() {
+    const best = getBest();
+    els.sheet.innerHTML = `
+      <h2>Game over 🦴</h2>
+      <div class="big">${state.streak}</div>
+      <p>correct in a row</p>
+      <p class="streaknote">Best streak: <b>${best}</b></p>
+      <button class="bigbtn endless" id="again">Play again</button>
+      <button class="bigbtn daily" id="tohub">Back to menu</button>`;
+    openOverlay();
+    $("#again").addEventListener("click", () => { closeOverlay(); startEndless(); });
+    $("#tohub").addEventListener("click", () => goHome());
+  }
+
+  // ---------- DAILY ----------
+  const DAILY_ROUNDS = 10;
+  function startDaily() {
+    mode = "daily";
+    const today = new Date();
+    const seed = E.dateSeed(today);
+    const saved = JSON.parse(localStorage.getItem(LS.daily(seed)) || "null");
+    if (saved && saved.done) { showDailyResult(seed, saved.results, today); return; }
+
+    const rng = E.makeRng(seed);
+    const rounds = [];
+    for (let i = 0; i < DAILY_ROUNDS; i++) rounds.push(E.makeRound(rng));
+    state = { seed, rounds, idx: 0, results: [], date: today };
+
+    els.scoreLabel.textContent = "Round";
+    els.bestVal.parentElement.classList.add("hidden");
+    els.dots.classList.remove("hidden");
+    renderDots();
+    showGame();
+    nextDaily();
+  }
+
+  function renderDots() {
+    let h = "";
+    for (let i = 0; i < DAILY_ROUNDS; i++) {
+      let cls = "dot";
+      if (i < state.results.length) cls += state.results[i] ? " correct" : " wrong";
+      else if (i === state.idx) cls += " current";
+      h += `<span class="${cls}"></span>`;
+    }
+    els.dots.innerHTML = h;
+  }
+
+  function nextDaily() {
+    els.scoreVal.textContent = (state.idx + 1) + "/" + DAILY_ROUNDS;
+    renderDots();
+    renderRound(state.rounds[state.idx]);
+  }
+
+  function dailyResult(round, correct) {
+    state.results.push(correct);
+    renderDots();
+    state.idx++;
+    setTimeout(() => {
+      if (state.idx < DAILY_ROUNDS) nextDaily();
+      else finishDaily();
+    }, 1150);
+  }
+
+  function finishDaily() {
+    localStorage.setItem(LS.daily(state.seed), JSON.stringify({ done: true, results: state.results }));
+    showDailyResult(state.seed, state.results, state.date);
+  }
+
+  function showDailyResult(seed, results, date) {
+    const score = results.filter(Boolean).length;
+    const grid = results.map(r => (r ? "🟩" : "🟥")).join("");
+    const dstr = fmtDate(date || new Date());
+    const shareText =
+      `DinoDecide ${dstr}\n${score}/${DAILY_ROUNDS} ${score === DAILY_ROUNDS ? "🦖 perfect!" : "🦕"}\n${grid}\n${location.origin}${location.pathname.replace(/decide\.html$/, "")}`;
+
+    els.sheet.innerHTML = `
+      <h2>Daily done!</h2>
+      <div class="big">${score}/${DAILY_ROUNDS}</div>
+      <div class="emojigrid">${grid}</div>
+      <p class="streaknote">Come back tomorrow for a new set 🥚</p>
+      <button class="bigbtn daily" id="share">Share result</button>
+      <button class="bigbtn endless" id="endless">Play endless mode</button>
+      <button class="bigbtn" style="background:#b0a08c;box-shadow:0 5px 0 #8f8069" id="tohub">Back to menu</button>`;
+    openOverlay();
+    showGame(); // ensure game container visible behind overlay
+    $("#share").addEventListener("click", () => doShare(shareText));
+    $("#endless").addEventListener("click", () => { closeOverlay(); startEndless(); });
+    $("#tohub").addEventListener("click", () => goHome());
+  }
+
+  function doShare(text) {
+    if (navigator.share) {
+      navigator.share({ text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(
+        () => toast("Result copied to clipboard!"),
+        () => toast("Copy failed — select and copy manually")
+      );
+    }
+  }
+
+  function fmtDate(d) {
+    const p = n => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  // ---------- UI helpers ----------
+  function showGame() {
+    const hub = $("#hub");
+    if (hub) hub.classList.add("hidden");
+    els.modeSelect.classList.add("hidden");
+    els.game.classList.remove("hidden");
+  }
+  function openOverlay() { els.overlay.classList.remove("hidden"); }
+  function closeOverlay() { els.overlay.classList.add("hidden"); }
+
+  let toastTimer = null;
+  function toast(msg) {
+    let t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t);
+      Object.assign(t.style, { position: "fixed", left: "50%", bottom: "28px", transform: "translateX(-50%)",
+        background: "#2c2016", color: "#fff", padding: "12px 18px", borderRadius: "999px",
+        fontFamily: "inherit", zIndex: 99, boxShadow: "0 6px 20px rgba(0,0,0,.3)" }); }
+    t.textContent = msg; t.style.opacity = "1";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => (t.style.opacity = "0"), 1800);
+  }
+
+  // ---------- boot ----------
+  E.load().then(() => {
+    $("#btn-daily").addEventListener("click", startDaily);
+    $("#btn-endless").addEventListener("click", startEndless);
+    // deep link: decide.html#endless / #daily
+    if (location.hash === "#endless") startEndless();
+    else if (location.hash === "#daily") startDaily();
+  }).catch(err => {
+    els.modeSelect.innerHTML = `<div class="modecard"><h2>Oops 🦴</h2><p>Couldn't load dinosaur data. If you opened this file directly, run it through a web server instead.</p></div>`;
+    console.error(err);
+  });
+})();
+
+</script>
+<script>
+(function () {
+  function toDecide(e){ if(e) e.preventDefault();
+    document.getElementById("hub").classList.add("hidden");
+    document.getElementById("mode-select").classList.remove("hidden");
+    window.scrollTo(0,0);
+  }
+  document.getElementById("tile-decide").addEventListener("click", toDecide);
+  document.getElementById("home-btn").addEventListener("click", function(){ window.__spa.home(); });
+  document.getElementById("brand").addEventListener("click", function(e){ e.preventDefault(); window.__spa.home(); });
+})();
+</script>
+</body>
+</html>

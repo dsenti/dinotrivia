@@ -50,13 +50,16 @@
   }
 
   let DINOS = [];
+  function ingest(json) {
+    DINOS = json.dinosaurs.map(d => Object.assign({ silhouette: silhouette(d) }, d));
+    return DINOS;
+  }
   function load() {
+    // single-file build inlines data as window.DINO_JSON; multi-file fetches it.
+    if (global.DINO_JSON) return Promise.resolve(ingest(global.DINO_JSON));
     return fetch("data/dinosaurs.json", { cache: "no-cache" })
       .then(r => r.json())
-      .then(json => {
-        DINOS = json.dinosaurs.map(d => Object.assign({ silhouette: silhouette(d) }, d));
-        return DINOS;
-      });
+      .then(ingest);
   }
 
   // Which dinos have a usable (non-null) value for a stat.
