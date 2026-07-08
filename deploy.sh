@@ -14,6 +14,17 @@ fi
 USER=$(gh api user -q .login)
 echo "Deploying as $USER to repo '$REPO'..."
 
+# Cache-bust static assets so browsers fetch the new CSS/JS right away
+# (GitHub Pages serves assets with a 10-minute cache; without this a redeploy
+#  can keep showing the old style.css / *.js until the cache expires).
+VER=$(date +%Y%m%d%H%M%S)
+node tools/stamp-version.js "$VER" >/dev/null 2>&1 || true
+if ! git diff --quiet; then
+  git add -A
+  git -c user.name='DinoTrivia' -c user.email='dominik.senti@gmail.com' commit -qm "deploy: cache-bust assets ($VER)"
+  echo "Stamped asset version $VER."
+fi
+
 # create the repo from this local folder (idempotent-ish: skip if it exists)
 if gh repo view "$USER/$REPO" >/dev/null 2>&1; then
   echo "Repo already exists; pushing to it."
