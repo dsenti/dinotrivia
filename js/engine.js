@@ -20,6 +20,7 @@
   // noun = label above the revealed number.
   const STATS = [
     { key: "weight", cat: "Weight", q: "Which was heavier?", noun: "weight", unit: "kg", fmt: v => fmtNum(v) },
+    { key: "length", cat: "Length", q: "Which was longer?", noun: "length", unit: "m", fmt: v => (v % 1 === 0 ? String(v) : v.toFixed(1)) },
     { key: "mya", cat: "When they lived", q: "Which lived earlier?", noun: "age", unit: "million yrs ago", fmt: v => fmtNum(v) },
     { key: "yearNamed", cat: "Year discovered", q: "Which was named more recently?", noun: "year first named", unit: "", fmt: v => String(v) },
     { key: "teeth", cat: "Number of teeth", q: "Which had more teeth?", noun: "number of teeth", unit: "teeth", fmt: v => fmtNum(v) },

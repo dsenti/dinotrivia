@@ -167,7 +167,7 @@
   // Categories varied enough to fill a 10-round day without feeling repetitive.
   // (Brain EQ, eggs and fingers have too few dinosaurs / distinct values to
   //  carry a whole daily on their own, so they only appear in endless mode.)
-  const DAILY_STAT_KEYS = ["weight", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
+  const DAILY_STAT_KEYS = ["weight", "length", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
 
   function pickDailyStat(rng) {
     const elig = E.STATS.filter(s => DAILY_STAT_KEYS.indexOf(s.key) !== -1 && E.withStat(s.key).length >= 10);
