@@ -15,16 +15,19 @@
   // Each comparable stat. `dir:"desc"` means a bigger raw number = the
   // "more/earlier/first" end; we always ask the player HIGHER or LOWER on the
   // displayed number, so direction only affects wording, not scoring.
+  // cat = short category name (daily chip), q = the question shown each round
+  // (always answered by tapping the dinosaur with the HIGHER raw value),
+  // noun = label above the revealed number.
   const STATS = [
-    { key: "weight", label: "heavier", noun: "weight", unit: "kg", fmt: v => fmtNum(v) },
-    { key: "mya", label: "older (lived earlier)", noun: "age", unit: "million yrs ago", fmt: v => fmtNum(v) },
-    { key: "yearNamed", label: "named more recently", noun: "year first named", unit: "", fmt: v => String(v) },
-    { key: "teeth", label: "more teeth", noun: "number of teeth", unit: "teeth", fmt: v => fmtNum(v) },
-    { key: "topSpeed", label: "faster", noun: "top speed", unit: "km/h", fmt: v => fmtNum(v) },
-    { key: "eq", label: "brainier", noun: "brain power (EQ)", unit: "EQ", fmt: v => v.toFixed(1) },
-    { key: "fingers", label: "more fingers", noun: "fingers per hand", unit: "fingers", fmt: v => String(v) },
-    { key: "eggClutch", label: "more eggs", noun: "eggs per clutch", unit: "eggs", fmt: v => String(v) },
-    { key: "fossilSpecimens", label: "more fossils found", noun: "fossils discovered", unit: "specimens", fmt: v => fmtNum(v) }
+    { key: "weight", cat: "Weight", q: "Which was heavier?", noun: "weight", unit: "kg", fmt: v => fmtNum(v) },
+    { key: "mya", cat: "When they lived", q: "Which lived earlier?", noun: "age", unit: "million yrs ago", fmt: v => fmtNum(v) },
+    { key: "yearNamed", cat: "Year discovered", q: "Which was named more recently?", noun: "year first named", unit: "", fmt: v => String(v) },
+    { key: "teeth", cat: "Number of teeth", q: "Which had more teeth?", noun: "number of teeth", unit: "teeth", fmt: v => fmtNum(v) },
+    { key: "topSpeed", cat: "Top speed", q: "Which was faster?", noun: "top speed", unit: "km/h", fmt: v => fmtNum(v) },
+    { key: "eq", cat: "Brain power", q: "Which was brainier?", noun: "brain power (EQ)", unit: "EQ", fmt: v => v.toFixed(1) },
+    { key: "fingers", cat: "Fingers per hand", q: "Which had more fingers?", noun: "fingers per hand", unit: "fingers", fmt: v => String(v) },
+    { key: "eggClutch", cat: "Eggs per clutch", q: "Which laid more eggs?", noun: "eggs per clutch", unit: "eggs", fmt: v => String(v) },
+    { key: "fossilSpecimens", cat: "Fossils found", q: "Which is known from more fossils?", noun: "fossils discovered", unit: "specimens", fmt: v => fmtNum(v) }
   ];
   const STAT_BY_KEY = {};
   STATS.forEach(s => (STAT_BY_KEY[s.key] = s));

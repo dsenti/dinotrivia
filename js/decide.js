@@ -20,7 +20,8 @@
     right: $("#right"),
     overlay: $("#overlay"),
     sheet: $("#sheet"),
-    dailyCat: $("#daily-cat")
+    dailyCat: $("#daily-cat"),
+    next: $("#next-btn")
   };
 
   const LS = {
@@ -34,22 +35,19 @@
   let state = null;     // per-mode state
 
   // ---------- rendering a dino card ----------
+  // The LEFT card is the known "anchor" (value shown); the RIGHT card is the new
+  // challenger (value hidden as "?"). The player taps whichever they think has
+  // the higher value for the round's category.
   function cardHTML(d, opts) {
     opts = opts || {};
     const stat = opts.stat;
-    let statBlock;
+    let statBlock = "";
     if (opts.reveal) {
       statBlock = `<div class="statline">${stat.noun}</div>
         <div class="statval">${stat.fmt(d[stat.key])} <span class="unit">${stat.unit}</span></div>`;
     } else if (opts.hidden) {
       statBlock = `<div class="statline">${stat.noun}</div>
-        <div class="statval">?</div>
-        <div class="guessrow">
-          <button class="guess higher" data-guess="higher">Higher ⬆</button>
-          <button class="guess lower" data-guess="lower">Lower ⬇</button>
-        </div>`;
-    } else {
-      statBlock = "";
+        <div class="statval">?</div>`;
     }
     const media = d.image
       ? `<div class="dino-img"><img src="${d.image}" alt="Life reconstruction of ${d.name}" loading="lazy" decoding="async" onerror="this.parentNode.innerHTML='<span class=&quot;silhouette&quot;>${d.silhouette}</span>'" /></div>`
@@ -61,20 +59,17 @@
       ${statBlock}`;
   }
 
-  function renderRound(round, opts) {
-    opts = opts || {};
-    els.left.className = "dino period-" + round.left.period;
-    els.right.className = "dino period-" + round.right.period;
+  function renderRound(round) {
+    state.round = round;
+    state.answered = false;
+    els.left.className = "dino pick period-" + round.left.period;
+    els.right.className = "dino pick period-" + round.right.period;
     els.left.innerHTML = cardHTML(round.left, { stat: round.stat, reveal: true });
     els.right.innerHTML = cardHTML(round.right, { stat: round.stat, hidden: true });
-    els.prompt.innerHTML = `Which had <b>${round.stat.label}</b>?`;
-    bindGuess(round);
-  }
-
-  function bindGuess(round) {
-    els.right.querySelectorAll(".guess").forEach(btn => {
-      btn.addEventListener("click", () => onGuess(round, btn.dataset.guess));
-    });
+    els.prompt.innerHTML = `${round.stat.q}`;
+    hideNext();
+    els.left.onclick = () => onPick("left");
+    els.right.onclick = () => onPick("right");
   }
 
   function tweenValue(el, stat, target) {
@@ -91,53 +86,66 @@
     requestAnimationFrame(step);
   }
 
-  function onGuess(round, guess) {
-    els.right.querySelectorAll(".guess").forEach(b => (b.disabled = true));
-    const correctDir = round.right[round.stat.key] > round.left[round.stat.key] ? "higher" : "lower";
-    const correct = guess === correctDir;
+  function onPick(side) {
+    if (state.answered) return;
+    state.answered = true;
+    const round = state.round, key = round.stat.key;
+    els.left.onclick = els.right.onclick = null;
+    els.left.classList.remove("pick");
+    els.right.classList.remove("pick");
 
-    // reveal challenger value
+    // reveal the challenger's value
     els.right.innerHTML = cardHTML(round.right, { stat: round.stat, reveal: true });
     const valEl = els.right.querySelector(".statval");
-    if (round.stat.key === "yearNamed") {
-      valEl.innerHTML = `${round.stat.fmt(round.right[round.stat.key])} <span class="unit">${round.stat.unit}</span>`;
-    } else {
-      tweenValue(valEl, round.stat, round.right[round.stat.key]);
-    }
-    els.right.classList.add(correct ? "correct" : "wrong");
+    if (key === "yearNamed") valEl.innerHTML = `${round.stat.fmt(round.right[key])} <span class="unit">${round.stat.unit}</span>`;
+    else tweenValue(valEl, round.stat, round.right[key]);
 
-    if (mode === "endless") endlessResult(round, correct);
-    else dailyResult(round, correct);
+    // the higher card is the right answer; highlight it, flag a wrong pick
+    const higherSide = round.left[key] > round.right[key] ? "left" : "right";
+    const correct = side === higherSide;
+    (higherSide === "left" ? els.left : els.right).classList.add("correct");
+    if (!correct) (side === "left" ? els.left : els.right).classList.add("wrong");
+
+    if (mode === "endless") endlessAfter(correct);
+    else dailyAfter(correct);
   }
+
+  // ---------- Next button ----------
+  function showNext(onNext) {
+    els.next.classList.remove("hidden");
+    els.next.onclick = () => { hideNext(); onNext(); };
+  }
+  function hideNext() { els.next.classList.add("hidden"); els.next.onclick = null; }
 
   // ---------- ENDLESS ----------
   function startEndless() {
     mode = "endless";
-    state = { streak: 0 };
+    state = { streak: 0, round: null, answered: false };
     els.scoreLabel.textContent = "Streak";
     els.dots.classList.add("hidden");
     if (els.dailyCat) els.dailyCat.classList.add("hidden");
     els.bestVal.parentElement.classList.remove("hidden");
     els.bestVal.textContent = getBest();
     els.scoreVal.textContent = "0";
+    hideNext();
     showGame();
-    const round = E.makeRound(Math.random);
-    renderRound(round);
+    renderRound(E.makeRound(Math.random));
   }
 
-  function endlessResult(round, correct) {
+  function endlessAfter(correct) {
     if (correct) {
       state.streak++;
       els.scoreVal.textContent = state.streak;
       if (state.streak > getBest()) { setBest(state.streak); els.bestVal.textContent = state.streak; }
-      setTimeout(() => {
-        // challenger becomes the new anchor
-        const next = E.makeRound(Math.random, { forcedLeft: round.right, avoid: new Set([round.left.name]) })
+      const prev = state.round;
+      showNext(() => {
+        // the just-revealed challenger is kept as the new anchor
+        const next = E.makeRound(Math.random, { forcedLeft: prev.right, avoid: new Set([prev.left.name]) })
           || E.makeRound(Math.random);
         renderRound(next);
-      }, 1150);
+      });
     } else {
-      setTimeout(() => endlessOver(), 1150);
+      setTimeout(endlessOver, 1250);
     }
   }
 
@@ -167,6 +175,25 @@
     return elig[Math.floor(rng() * elig.length)].key;
   }
 
+  // Build the day's chain: up to 10 comparisons where each challenger becomes
+  // the next anchor, and no dinosaur is reused — so each appears in at most two
+  // (consecutive) rounds. Deterministic from the seed.
+  function buildDailyChain(rng, statKey) {
+    const chain = [], used = new Set();
+    const first = E.makeRound(rng, { statKey });
+    if (!first) return chain;
+    chain.push(first); used.add(first.left.name); used.add(first.right.name);
+    for (let i = 1; i < DAILY_ROUNDS; i++) {
+      const prev = chain[i - 1];
+      const r = E.makeRound(rng, { statKey, forcedLeft: prev.right, avoid: used })
+        || E.makeRound(rng, { statKey, forcedLeft: prev.right, avoid: new Set([prev.left.name]) })
+        || E.makeRound(rng, { statKey, forcedLeft: prev.right });
+      if (!r) break;
+      chain.push(r); used.add(r.right.name);
+    }
+    return chain;
+  }
+
   function startDaily() {
     mode = "daily";
     const today = new Date();
@@ -176,28 +203,20 @@
 
     const rng = E.makeRng(seed);
     const statKey = pickDailyStat(rng);          // one fixed category for everyone today
-    const rounds = [], seen = new Set();
-    let guard = 0;
-    while (rounds.length < DAILY_ROUNDS && guard++ < 800) {
-      const r = E.makeRound(rng, { statKey });
-      if (!r) break;
-      const k = [r.left.name, r.right.name].sort().join("|");
-      if (seen.has(k)) continue;                 // avoid repeating the same pairing
-      seen.add(k); rounds.push(r);
-    }
-    while (rounds.length < DAILY_ROUNDS) { const r = E.makeRound(rng, { statKey }); if (!r) break; rounds.push(r); }
-    state = { seed, rounds, idx: 0, results: [], date: today, statKey };
+    const chain = buildDailyChain(rng, statKey);
+    state = { seed, statKey, chain, idx: 0, results: [], date: today, round: null, answered: false };
 
     els.scoreLabel.textContent = "Round";
     els.bestVal.parentElement.classList.add("hidden");
     els.dots.classList.remove("hidden");
     if (els.dailyCat) {
-      els.dailyCat.textContent = "Today's category · " + E.STAT_BY_KEY[statKey].noun;
+      els.dailyCat.textContent = "Today's category · " + E.STAT_BY_KEY[statKey].cat;
       els.dailyCat.classList.remove("hidden");
     }
+    els.scoreVal.textContent = "1/" + DAILY_ROUNDS;
     renderDots();
     showGame();
-    nextDaily();
+    renderRound(chain[0]);
   }
 
   function renderDots() {
@@ -205,26 +224,26 @@
     for (let i = 0; i < DAILY_ROUNDS; i++) {
       let cls = "dot";
       if (i < state.results.length) cls += state.results[i] ? " correct" : " wrong";
-      else if (i === state.idx) cls += " current";
+      else if (i === state.idx && !state.answered) cls += " current";
       h += `<span class="${cls}"></span>`;
     }
     els.dots.innerHTML = h;
   }
 
-  function nextDaily() {
-    els.scoreVal.textContent = (state.idx + 1) + "/" + DAILY_ROUNDS;
-    renderDots();
-    renderRound(state.rounds[state.idx]);
-  }
-
-  function dailyResult(round, correct) {
+  function dailyAfter(correct) {
     state.results.push(correct);
     renderDots();
+    if (!correct) { setTimeout(finishDaily, 1250); return; } // one miss ends the run
     state.idx++;
-    setTimeout(() => {
-      if (state.idx < DAILY_ROUNDS) nextDaily();
-      else finishDaily();
-    }, 1150);
+    if (state.idx < state.chain.length) {
+      showNext(() => {
+        els.scoreVal.textContent = (state.idx + 1) + "/" + DAILY_ROUNDS;
+        renderDots();
+        renderRound(state.chain[state.idx]);
+      });
+    } else {
+      setTimeout(finishDaily, 1250); // cleared every round
+    }
   }
 
   function finishDaily() {
@@ -234,14 +253,17 @@
 
   function showDailyResult(seed, results, date) {
     if (els.dailyCat) els.dailyCat.classList.add("hidden");
+    hideNext();
     const score = results.filter(Boolean).length;
-    const grid = results.map(r => (r ? "🟩" : "🟥")).join("");
+    // pad to 10: played rounds show 🟩/🟥, rounds never reached show ⬛
+    let grid = "";
+    for (let i = 0; i < DAILY_ROUNDS; i++) grid += i < results.length ? (results[i] ? "🟩" : "🟥") : "⬛";
     const dstr = fmtDate(date || new Date());
     const shareText =
       `DinoDecide ${dstr}\n${score}/${DAILY_ROUNDS} ${score === DAILY_ROUNDS ? "🦖 perfect!" : "🦕"}\n${grid}\n${location.origin}${location.pathname.replace(/decide\.html$/, "")}`;
 
     els.sheet.innerHTML = `
-      <h2>Daily done!</h2>
+      <h2>${score === DAILY_ROUNDS ? "Perfect day! 🦖" : "Daily done!"}</h2>
       <div class="big">${score}/${DAILY_ROUNDS}</div>
       <div class="emojigrid">${grid}</div>
       <p class="streaknote">Come back tomorrow for a new set 🥚</p>
