@@ -28,7 +28,10 @@
     { key: "eq", cat: "Brain power", q: "Which was brainier?", noun: "brain power (EQ)", unit: "EQ", fmt: v => v.toFixed(1) },
     { key: "fingers", cat: "Fingers per hand", q: "Which had more fingers?", noun: "fingers per hand", unit: "fingers", fmt: v => String(v) },
     { key: "eggClutch", cat: "Eggs per clutch", q: "Which laid more eggs?", noun: "eggs per clutch", unit: "eggs", fmt: v => String(v) },
-    { key: "fossilSpecimens", cat: "Fossils found", q: "Which is known from more fossils?", noun: "fossils discovered", unit: "specimens", fmt: v => fmtNum(v) }
+    { key: "fossilSpecimens", cat: "Fossils found", q: "Which is known from more fossils?", noun: "fossils discovered", unit: "specimens", fmt: v => fmtNum(v) },
+    { key: "height", cat: "Height", q: "Which stood taller?", noun: "hip height", unit: "m", fmt: v => smallFmt(v) },
+    { key: "skull", cat: "Skull length", q: "Which had the bigger head?", noun: "skull length", unit: "m", fmt: v => smallFmt(v) },
+    { key: "neck", cat: "Neck vertebrae", q: "Which had more neck bones?", noun: "neck vertebrae", unit: "bones", fmt: v => String(v) }
   ];
   const STAT_BY_KEY = {};
   STATS.forEach(s => (STAT_BY_KEY[s.key] = s));
@@ -37,6 +40,7 @@
     if (v >= 1000) return v.toLocaleString("en-US");
     return String(v);
   }
+  function smallFmt(v) { return (+v.toFixed(2)).toString(); } // 2.70->"2.7", 0.85->"0.85", 5->"5"
 
   // --- seeded PRNG (mulberry32) so a given seed always yields the same run ---
   function makeRng(seed) {

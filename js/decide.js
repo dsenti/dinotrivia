@@ -71,13 +71,15 @@
     els.right.onclick = () => onPick("right");
   }
 
+  const TWEEN_DP = { eq: 1, length: 1, height: 1, skull: 2 }; // decimals to show mid-tween
   function tweenValue(el, stat, target) {
     const dur = 650, start = performance.now();
+    const dp = TWEEN_DP[stat.key];
     function step(now) {
       const t = Math.min(1, (now - start) / dur);
       const eased = 1 - Math.pow(1 - t, 3);
       const val = target * eased;
-      const shown = stat.key === "eq" ? val.toFixed(1) : stat.fmt(Math.round(val));
+      const shown = dp != null ? val.toFixed(dp) : stat.fmt(Math.round(val));
       el.innerHTML = `${shown} <span class="unit">${stat.unit}</span>`;
       if (t < 1) requestAnimationFrame(step);
       else el.innerHTML = `${stat.fmt(target)} <span class="unit">${stat.unit}</span>`;
@@ -167,7 +169,7 @@
   // Categories varied enough to fill a 10-round day without feeling repetitive.
   // (Brain EQ, eggs and fingers have too few dinosaurs / distinct values to
   //  carry a whole daily on their own, so they only appear in endless mode.)
-  const DAILY_STAT_KEYS = ["weight", "length", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
+  const DAILY_STAT_KEYS = ["weight", "length", "height", "skull", "mya", "yearNamed", "teeth", "topSpeed", "fossilSpecimens"];
 
   function pickDailyStat(rng) {
     const elig = E.STATS.filter(s => DAILY_STAT_KEYS.indexOf(s.key) !== -1 && E.withStat(s.key).length >= 10);
