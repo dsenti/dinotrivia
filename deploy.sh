@@ -35,11 +35,10 @@ else
   gh repo create "$REPO" --public --source=. --remote=origin --push
 fi
 
-# enable GitHub Pages from main / root (ignore error if already enabled)
-gh api -X POST "repos/$USER/$REPO/pages" -f "source[branch]=main" -f "source[path]=/" 2>/dev/null \
-  || gh api -X PUT "repos/$USER/$REPO/pages" -f "source[branch]=main" -f "source[path]=/" 2>/dev/null \
-  || echo "(Pages may already be enabled — check Settings > Pages.)"
-
+# Pages is configured to build via GitHub Actions (.github/workflows/pages.yml).
+# The push above triggers that workflow, which builds and deploys the site.
+# (We intentionally do NOT touch the Pages source here — flipping it back to the
+#  legacy build pipeline can hit a stuck build queue.)
 echo
-echo "Done. Your site will be live in ~1 minute at:"
-echo "   https://$USER.github.io/$REPO/"
+echo "Pushed. GitHub Actions is deploying — watch it with:  gh run watch"
+echo "Live shortly at:  https://$USER.github.io/$REPO/"
