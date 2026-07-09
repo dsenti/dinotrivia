@@ -13,6 +13,7 @@ const read = f => fs.readFileSync(path.join(R, f), "utf8");
 const css = read("css/style.css");
 const engine = read("js/engine.js");
 const decide = read("js/decide.js");
+const theme = read("js/theme.js");
 const data = JSON.parse(read("data/dinosaurs.json"));
 const credits = JSON.parse(read("assets/dino/credits.json"));
 
@@ -40,6 +41,7 @@ const page = `<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>DinoTrivia — DinoDecide</title>
+<script>${theme}</script>
 <style>
 ${css}
 /* standalone credits view */
@@ -57,7 +59,10 @@ ${css}
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="#" id="brand"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
-    <button class="iconbtn" id="home-btn" title="Menu" aria-label="Menu">🏠</button>
+    <span class="tb-actions">
+      <button class="iconbtn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+      <button class="iconbtn" id="home-btn" title="Menu" aria-label="Menu">🏠</button>
+    </span>
   </div>
 
   <div id="hub">
@@ -69,13 +74,14 @@ ${css}
     <div class="tiles">
       <a class="tile" href="#" id="tile-decide">
         <span class="emoji">⚖️</span>
-        <span class="name">DinoDecide</span>
-        <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
-        <span class="tag">Play now</span>
+        <span class="tile-text">
+          <span class="name">DinoDecide</span>
+          <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
+        </span>
+        <span class="tag">Play</span>
       </a>
-      <div class="tile soon"><span class="emoji">🔤</span><span class="name">Dinodle</span><span class="desc">Guess the daily mystery dinosaur.</span><span class="tag soon">Soon</span></div>
-      <div class="tile soon"><span class="emoji">🏆</span><span class="name">DinoRankle</span><span class="desc">Put five dinosaurs in the right order.</span><span class="tag soon">Soon</span></div>
-      <div class="tile soon"><span class="emoji">🔗</span><span class="name">DinoConnect</span><span class="desc">Find the hidden groups.</span><span class="tag soon">Soon</span></div>
+      <div class="tile soon"><span class="emoji">🏆</span><span class="tile-text"><span class="name">DinoRankle</span><span class="desc">Rank dinosaurs across categories — on the website.</span></span><span class="tag soon">Web</span></div>
+      <div class="tile soon"><span class="emoji">🔗</span><span class="tile-text"><span class="name">DinoConnections</span><span class="desc">Group each dinosaur's tiles — on the website.</span></span><span class="tag soon">Web</span></div>
     </div>
     <div class="footer">Made for dino fans · stats are approximate paleontological estimates<br /><a href="#" class="to-credits">Image credits</a></div>
   </div>

@@ -7,6 +7,7 @@
   <title>Image credits — DinoTrivia</title>
   <link rel="stylesheet" href="css/style.css?v=20260709063045" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦕</text></svg>" />
+  <script src="js/theme.js"></script>
   <style>
     .credits { background: var(--card); border: 1px solid var(--card-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 8px 4px; margin-top: 12px; }
     .credits ul { list-style: none; margin: 0; padding: 0; }
@@ -23,7 +24,10 @@
   <div class="wrap">
     <div class="topbar">
       <a class="brand" href="index.html"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
-      <a class="iconbtn" href="index.html" title="Home">🏠</a>
+      <span class="tb-actions">
+        <button class="iconbtn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+        <a class="iconbtn" href="index.html" title="Home">🏠</a>
+      </span>
     </div>
     <div class="hero" style="padding-bottom:4px">
       <h1 style="font-size:26px">Image credits</h1>

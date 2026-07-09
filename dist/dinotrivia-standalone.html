@@ -4,6 +4,37 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>DinoTrivia — DinoDecide</title>
+<script>/* Light/dark theme toggle. Applies the saved choice before paint (no flash),
+   overriding the OS preference; the button flips and persists it. Shared by
+   every page. */
+(function () {
+  var KEY = "dinotheme";
+  var root = document.documentElement;
+  // apply saved choice immediately (this script is in <head>, runs before body)
+  try { var saved = localStorage.getItem(KEY); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+
+  function current() {
+    var t = root.getAttribute("data-theme");
+    if (t) return t;
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  function updateBtn() {
+    var b = document.getElementById("theme-toggle");
+    if (!b) return;
+    var dark = current() === "dark";
+    b.textContent = dark ? "☀️" : "🌙";
+    b.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  }
+  function apply(t) { root.setAttribute("data-theme", t); try { localStorage.setItem(KEY, t); } catch (e) {} updateBtn(); }
+  function wire() {
+    var b = document.getElementById("theme-toggle");
+    if (b) b.onclick = function () { apply(current() === "dark" ? "light" : "dark"); };
+    updateBtn();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
+  else wire();
+})();
+</script>
 <style>
 /* ============================================================
    DinoTrivia — visual identity: "geologic time"
@@ -87,6 +118,7 @@ body {
 
 /* ---------- topbar ---------- */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tb-actions { display: flex; align-items: center; gap: 8px; }
 .brand {
   display: flex; align-items: center; gap: 8px;
   font-weight: 700; font-size: 21px; letter-spacing: -0.02em;
@@ -111,26 +143,28 @@ body {
 .hero h1 { font-size: 32px; margin: 4px 0 2px; text-wrap: balance; letter-spacing: -0.02em; }
 .hero p { color: var(--ink-soft); margin: 2px 0; font-size: 15.5px; }
 
-.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-top: 18px; }
+/* Home tiles stack in a single column as horizontal rows: emoji · text · tag */
+.tiles { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
 .tile {
   background: var(--card); border: 1px solid var(--card-line);
-  border-radius: var(--radius); padding: 18px 14px;
+  border-radius: var(--radius); padding: 16px 16px 16px 18px;
   text-decoration: none; color: var(--ink);
   box-shadow: var(--shadow);
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+  display: flex; flex-direction: row; align-items: center; gap: 15px; text-align: left;
   transition: transform .08s ease; position: relative; overflow: hidden;
 }
-.tile::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px;
-  background: linear-gradient(90deg, var(--triassic), var(--jurassic), var(--cretaceous)); }
+.tile::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 6px; height: auto;
+  background: linear-gradient(180deg, var(--triassic), var(--jurassic), var(--cretaceous)); }
 .tile.soon::before { opacity: .35; }
 .tile:active { transform: translateY(3px); }
-.tile .emoji { font-size: 38px; margin-top: 4px; }
-.tile .name { font-weight: 700; font-size: 18px; margin-top: 6px; letter-spacing: -0.01em; }
-.tile .desc { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.3; }
+.tile .emoji { font-size: 40px; flex: none; line-height: 1; }
+.tile-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tile .name { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+.tile .desc { font-size: 13px; color: var(--ink-soft); line-height: 1.3; }
 .tile.soon { opacity: .58; }
 .tag {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-  color: #fff; background: var(--amber); padding: 3px 9px; border-radius: 999px; margin-top: 9px;
+  flex: none; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  color: #fff; background: var(--amber); padding: 7px 14px; border-radius: 999px;
 }
 .tag.soon { background: var(--ink-soft); }
 
@@ -348,7 +382,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); ou
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="#" id="brand"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
-    <button class="iconbtn" id="home-btn" title="Menu" aria-label="Menu">🏠</button>
+    <span class="tb-actions">
+      <button class="iconbtn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+      <button class="iconbtn" id="home-btn" title="Menu" aria-label="Menu">🏠</button>
+    </span>
   </div>
 
   <div id="hub">
@@ -360,13 +397,14 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); ou
     <div class="tiles">
       <a class="tile" href="#" id="tile-decide">
         <span class="emoji">⚖️</span>
-        <span class="name">DinoDecide</span>
-        <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
-        <span class="tag">Play now</span>
+        <span class="tile-text">
+          <span class="name">DinoDecide</span>
+          <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
+        </span>
+        <span class="tag">Play</span>
       </a>
-      <div class="tile soon"><span class="emoji">🔤</span><span class="name">Dinodle</span><span class="desc">Guess the daily mystery dinosaur.</span><span class="tag soon">Soon</span></div>
-      <div class="tile soon"><span class="emoji">🏆</span><span class="name">DinoRankle</span><span class="desc">Put five dinosaurs in the right order.</span><span class="tag soon">Soon</span></div>
-      <div class="tile soon"><span class="emoji">🔗</span><span class="name">DinoConnect</span><span class="desc">Find the hidden groups.</span><span class="tag soon">Soon</span></div>
+      <div class="tile soon"><span class="emoji">🏆</span><span class="tile-text"><span class="name">DinoRankle</span><span class="desc">Rank dinosaurs across categories — on the website.</span></span><span class="tag soon">Web</span></div>
+      <div class="tile soon"><span class="emoji">🔗</span><span class="tile-text"><span class="name">DinoConnections</span><span class="desc">Group each dinosaur's tiles — on the website.</span></span><span class="tag soon">Web</span></div>
     </div>
     <div class="footer">Made for dino fans · stats are approximate paleontological estimates<br /><a href="#" class="to-credits">Image credits</a></div>
   </div>

@@ -11,11 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css?v=20260709063045" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦕</text></svg>" />
+  <script src="js/theme.js"></script>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
       <a class="brand" href="index.html"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
+      <button class="iconbtn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
     </div>
 
     <div class="hero">
@@ -27,21 +29,27 @@
     <div class="tiles">
       <a class="tile live" href="decide.html">
         <span class="emoji">⚖️</span>
-        <span class="name">DinoDecide</span>
-        <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
-        <span class="tag">Play now</span>
+        <span class="tile-text">
+          <span class="name">DinoDecide</span>
+          <span class="desc">Higher or lower? Compare dinosaurs on weight, teeth, speed &amp; more.</span>
+        </span>
+        <span class="tag">Play</span>
       </a>
       <a class="tile live" href="rankle.html">
         <span class="emoji">🏆</span>
-        <span class="name">DinoRankle</span>
-        <span class="desc">Assign a dinosaur to each category — lowest score wins.</span>
-        <span class="tag">Play now</span>
+        <span class="tile-text">
+          <span class="name">DinoRankle</span>
+          <span class="desc">Assign a dinosaur to each category — lowest score wins.</span>
+        </span>
+        <span class="tag">Play</span>
       </a>
       <a class="tile live" href="connections.html">
         <span class="emoji">🔗</span>
-        <span class="name">DinoConnections</span>
-        <span class="desc">Group each dinosaur's four tiles: picture, name &amp; facts.</span>
-        <span class="tag">Play now</span>
+        <span class="tile-text">
+          <span class="name">DinoConnections</span>
+          <span class="desc">Group each dinosaur's four tiles: picture, name &amp; facts.</span>
+        </span>
+        <span class="tag">Play</span>
       </a>
     </div>
 
