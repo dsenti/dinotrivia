@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ecefe4" />
+  <title>DinoRankle — rank the dinosaurs</title>
+  <meta name="description" content="Assign a dinosaur to each category without seeing what comes next. Lower score wins." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html"><span class="logo">🦕</span> Dino<b>Trivia</b></a>
+      <a class="iconbtn" href="index.html" title="Menu">🏠</a>
+    </div>
+
+    <div id="mode-select">
+      <div class="hero" style="padding-bottom:0">
+        <h1 style="font-size:30px">🏆 DinoRankle</h1>
+        <p>A category appears. Pick the dinosaur you think fits best — but you <b>can't see the next categories</b>.</p>
+      </div>
+      <div class="modecard">
+        <h2>Choose a mode</h2>
+        <p>Each pick scores its true rank (1 = best). Use every dinosaur once. <b>Lowest total wins.</b></p>
+        <button class="bigbtn daily" id="btn-daily">Daily Round
+          <small>same five for everyone today · shareable</small></button>
+        <button class="bigbtn endless" id="btn-practice">Practice
+          <small>a fresh random set every time</small></button>
+      </div>
+      <div class="footer"><a href="credits.html">Image credits</a></div>
+    </div>
+
+    <div id="game" class="hidden">
+      <div class="scorebar">
+        <span class="pill" id="mode-pill">Daily</span>
+        <span class="pill">Score: <b id="score">0</b> <span style="font-weight:500;color:var(--ink-soft)">(low = good)</span></span>
+      </div>
+      <div class="rk-round" id="round"></div>
+      <div class="rk-cat" id="cat"></div>
+      <div class="rk-list" id="list"></div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay hidden"><div class="sheet" id="sheet"></div></div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/rankle.js"></script>
+</body>
+</html>

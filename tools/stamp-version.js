@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const R = path.resolve(__dirname, "..");
 const version = process.argv[2] || String(Date.now());
-const files = ["index.html", "decide.html", "credits.html"];
+const files = ["index.html", "decide.html", "credits.html", "connections.html", "rankle.html"];
 
 // matches css/style.css or js/anything.js, with or without an existing ?v=...
 const re = /(href|src)="((?:css|js)\/[A-Za-z0-9_.-]+\.(?:css|js))(?:\?v=[^"]*)?"/g;
