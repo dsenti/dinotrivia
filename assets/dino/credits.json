@@ -774,11 +774,11 @@
     "slug": "guanlong",
     "file": "assets/dino/guanlong.jpg",
     "ext": "jpg",
-    "title": "File:Guanlong wucaii feathered.JPG",
-    "artist": "Conty",
+    "title": "File:Guanlong wucaii by durbed.jpg",
+    "artist": "Durbed",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Guanlong_wucaii_feathered.JPG"
+    "source": "https://commons.wikimedia.org/wiki/File:Guanlong_wucaii_by_durbed.jpg"
   },
   {
     "name": "Muttaburrasaurus",
@@ -818,11 +818,11 @@
     "slug": "shantungosaurus",
     "file": "assets/dino/shantungosaurus.png",
     "ext": "png",
-    "title": "File:Shantungosaurus giganteus.png",
-    "artist": "Connor Ashbridge",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Shantungosaurus_giganteus.png"
+    "title": "File:Shantungosaurus life.png",
+    "artist": "IJReid",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Shantungosaurus_life.png"
   },
   {
     "name": "Mosasaurus",
@@ -838,13 +838,13 @@
   {
     "name": "Tylosaurus",
     "slug": "tylosaurus",
-    "file": "assets/dino/tylosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Tylosaurus BW.jpg",
+    "file": "assets/dino/tylosaurus.png",
+    "ext": "png",
+    "title": "File:Tylosaurus nepaeolicus NT.png",
     "artist": "Nobu Tamura",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Tylosaurus_BW.jpg"
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Tylosaurus_nepaeolicus_NT.png"
   },
   {
     "name": "Elasmosaurus",
