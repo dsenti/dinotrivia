@@ -178,11 +178,19 @@
           els.grid.appendChild(el);
         });
     }
-    const bar = document.querySelector(".cbtns");
-    if (bar) {
-      bar.innerHTML = '<button class="cbtn solid" id="backres">See results</button>';
-      document.querySelector("#backres").onclick = () => showResult(state.won);
+    // Hide the play controls (don't destroy them — a new game reuses them) and
+    // show a single "See results" button.
+    els.shuffle.style.display = els.deselect.style.display = els.submit.style.display = "none";
+    let back = document.querySelector("#backres");
+    if (!back) {
+      back = document.createElement("button");
+      back.className = "cbtn solid";
+      back.id = "backres";
+      back.textContent = "See results";
+      document.querySelector(".cbtns").appendChild(back);
     }
+    back.style.display = "";
+    back.onclick = () => showResult(state.won);
   }
 
   function finish(won) {
@@ -246,6 +254,11 @@
     els.submit.disabled = true;
     els.modeSelect.classList.add("hidden");
     els.game.classList.remove("hidden");
+    // Restore the play controls in case the previous game left the solution
+    // view up (which hides them and adds a "See results" button).
+    const back = document.querySelector("#backres");
+    if (back) back.remove();
+    els.shuffle.style.display = els.deselect.style.display = els.submit.style.display = "";
     renderSolved(); renderGrid();
   }
   function startDaily() {
