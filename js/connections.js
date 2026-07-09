@@ -103,7 +103,7 @@
       const el = document.createElement("button");
       el.className = "ctile" + (t.type === "image" ? " img" : "") + (state.selected.has(i) ? " sel" : "");
       el.innerHTML = tileInner(t);
-      el.onclick = () => toggle(i);
+      el.onclick = () => toggle(i, el);
       els.grid.appendChild(el);
     });
   }
@@ -118,12 +118,13 @@
     }).join("");
   }
 
-  function toggle(i) {
+  function toggle(i, el) {
     if (state.over) return;
-    if (state.selected.has(i)) state.selected.delete(i);
-    else if (state.selected.size < PER_GROUP) state.selected.add(i);
+    // Only flip the clicked tile's class — never re-render the grid here, or the
+    // <img> tiles would reload and flicker on every tap.
+    if (state.selected.has(i)) { state.selected.delete(i); el.classList.remove("sel"); }
+    else if (state.selected.size < PER_GROUP) { state.selected.add(i); el.classList.add("sel"); }
     els.submit.disabled = state.selected.size !== PER_GROUP;
-    renderGrid();
   }
 
   function onSubmit() {
@@ -185,6 +186,9 @@
   function finish(won) {
     state.over = true;
     state.won = won;
+    // Real groups solved by the player = number of correct guesses (all 4 same
+    // group). Derived from guesses so it's right both live and on daily replay.
+    state.solvedCount = state.guesses.filter(g => g.length === PER_GROUP && g.every(x => x === g[0])).length;
     // reveal any unsolved groups
     for (let gi = 0; gi < GROUPS; gi++) if (state.solvedGroups.indexOf(gi) === -1) state.solvedGroups.push(gi);
     state.tiles.forEach(t => (t.solved = true));
@@ -197,16 +201,22 @@
     // one row of 4 squares per guess, coloured by each selected tile's group
     return state.guesses.map(g => g.map(gid => EMOJI[gid]).join("")).join("\n");
   }
+  // Colour key of the four groups: one row per group, so all four colours
+  // always appear (used for the on-screen results visual).
+  function solutionGrid() {
+    return [0, 1, 2, 3].map(gi => EMOJI[gi].repeat(PER_GROUP)).join("\n");
+  }
 
   function showResult(won) {
     const grid = shareGrid();
     const dstr = mode === "daily" ? " " + fmtDate(state.date) : "";
     const share = `DinoConnections${dstr}\n${won ? "Solved with " + state.mistakes + " mistake" + (state.mistakes === 1 ? "" : "s") : "Missed it"}\n${grid}\n${location.origin}${location.pathname.replace(/connections\.html$/, "")}`;
+    const visual = solutionGrid();
     els.sheet.innerHTML = `
       <h2>${won ? "Nice grouping! 🦕" : "Out of tries 🦴"}</h2>
-      <div class="big">${state.solvedGroups.length}/${GROUPS}</div>
+      <div class="big">${state.solvedCount}/${GROUPS}</div>
       <p class="streaknote">${won ? "Solved with " + state.mistakes + " mistake" + (state.mistakes === 1 ? "" : "s") + "." : "Better luck next time."}</p>
-      <div class="emojigrid" style="font-size:18px;line-height:1.3">${grid.replace(/\n/g, "<br>")}</div>
+      <div class="emojigrid" style="font-size:18px;line-height:1.3">${visual.replace(/\n/g, "<br>")}</div>
       ${!won ? `<button class="bigbtn" style="background:#6a7b52;box-shadow:0 5px 0 #55643f" id="showsol">Show solution</button>` : ""}
       ${mode === "daily" ? `<button class="bigbtn daily" id="share">Share result</button>` : ""}
       <button class="bigbtn endless" id="again">${mode === "daily" ? "Play practice" : "New puzzle"}</button>
