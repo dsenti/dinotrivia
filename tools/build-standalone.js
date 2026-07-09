@@ -83,7 +83,7 @@ ${css}
       <div class="tile soon"><span class="emoji">🏆</span><span class="tile-text"><span class="name">DinoRankle</span><span class="desc">Rank dinosaurs across categories — on the website.</span></span><span class="tag soon">Web</span></div>
       <div class="tile soon"><span class="emoji">🔗</span><span class="tile-text"><span class="name">DinoConnections</span><span class="desc">Group each dinosaur's tiles — on the website.</span></span><span class="tag soon">Web</span></div>
     </div>
-    <div class="footer">Made for dino fans · stats are approximate paleontological estimates<br /><a href="#" class="to-credits">Image credits</a></div>
+    <div class="footer">Made for my two favorite dino fans · stats are approximate paleontological estimates<br /><a href="#" class="to-credits">Image credits</a></div>
   </div>
 
   <div id="mode-select" class="hidden">
