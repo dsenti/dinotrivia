@@ -2,13 +2,13 @@
   {
     "name": "Tyrannosaurus",
     "slug": "tyrannosaurus",
-    "file": "assets/dino/tyrannosaurus.png",
-    "ext": "png",
-    "title": "File:Reconstruction of Tyrannosaurus mcraeensis.png",
-    "artist": "Veselin Stefanov - V3s0",
+    "file": "assets/dino/tyrannosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Rjpalmer tyrannosaurusrex (white background).jpg",
+    "artist": "RJPalmerArt",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AReconstruction%20of%20Tyrannosaurus%20mcraeensis.png"
+    "source": "https://commons.wikimedia.org/wiki/File:Rjpalmer_tyrannosaurusrex_(white_background).jpg"
   },
   {
     "name": "Triceratops",
@@ -57,13 +57,13 @@
   {
     "name": "Spinosaurus",
     "slug": "spinosaurus",
-    "file": "assets/dino/spinosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Spinosaurus durbed.jpg",
-    "artist": "Durbed",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ASpinosaurus%20durbed.jpg"
+    "file": "assets/dino/spinosaurus.png",
+    "ext": "png",
+    "title": "File:202005 Spinosaurus aegyptiacus.png",
+    "artist": "DataBase Center for Life Science (DBCLS)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:202005_Spinosaurus_aegyptiacus.png"
   },
   {
     "name": "Allosaurus",
@@ -79,13 +79,13 @@
   {
     "name": "Diplodocus",
     "slug": "diplodocus",
-    "file": "assets/dino/diplodocus.jpg",
-    "ext": "jpg",
-    "title": "File:Diplodocus BW.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ADiplodocus%20BW.jpg"
+    "file": "assets/dino/diplodocus.png",
+    "ext": "png",
+    "title": "File:202005 Diplodocus carnegii.png",
+    "artist": "DataBase Center for Life Science (DBCLS)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:202005_Diplodocus_carnegii.png"
   },
   {
     "name": "Ankylosaurus",
@@ -103,11 +103,11 @@
     "slug": "parasaurolophus",
     "file": "assets/dino/parasaurolophus.png",
     "ext": "png",
-    "title": "File:Parasaurolophuspic steveoc.png",
-    "artist": "Parasaurolophuspic_steveoc.jpg: Steveoc86 derivative work: Crisco 1492 (talk)",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
-    "source": "https://commons.wikimedia.org/wiki/File%3AParasaurolophuspic%20steveoc.png"
+    "title": "File:Life reconstruction of Parasaurolophus walkeri.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Parasaurolophus_walkeri.png"
   },
   {
     "name": "Iguanodon",
@@ -156,13 +156,13 @@
   {
     "name": "Archaeopteryx",
     "slug": "archaeopteryx",
-    "file": "assets/dino/archaeopteryx.jpg",
-    "ext": "jpg",
-    "title": "File:Archaeopteryx in the night NT.jpg",
-    "artist": "NobuTamura http://paleoexhibit.blogspot.com/ http://spinops.blogspot.com/ and Tyrannosaure",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AArchaeopteryx%20in%20the%20night%20NT.jpg"
+    "file": "assets/dino/archaeopteryx.png",
+    "ext": "png",
+    "title": "File:202010 Archaeopteryx lithographica.png",
+    "artist": "DataBase Center for Life Science (DBCLS)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:202010_Archaeopteryx_lithographica.png"
   },
   {
     "name": "Oviraptor",
@@ -178,35 +178,35 @@
   {
     "name": "Maiasaura",
     "slug": "maiasaura",
-    "file": "assets/dino/maiasaura.jpg",
-    "ext": "jpg",
-    "title": "File:Maiasaura BW.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AMaiasaura%20BW.jpg"
+    "file": "assets/dino/maiasaura.png",
+    "ext": "png",
+    "title": "File:Maiasaura peeblesorum.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maiasaura_peeblesorum.png"
   },
   {
     "name": "Therizinosaurus",
     "slug": "therizinosaurus",
-    "file": "assets/dino/therizinosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Therizinosaurus by johnson mortimer-da8hjr5.jpg",
-    "artist": "Johnson Mortimer",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ATherizinosaurus%20by%20johnson%20mortimer-da8hjr5.jpg"
+    "file": "assets/dino/therizinosaurus.png",
+    "ext": "png",
+    "title": "File:Therizinosaurus Restoration.png",
+    "artist": "PaleoNeolitic",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Therizinosaurus_Restoration.png"
   },
   {
     "name": "Carnotaurus",
     "slug": "carnotaurus",
-    "file": "assets/dino/carnotaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Carnotaurus life restoration (mirrored).jpg",
-    "artist": "Lida Xing and Yi Liu",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
-    "source": "https://commons.wikimedia.org/wiki/File%3ACarnotaurus%20life%20restoration%20(mirrored).jpg"
+    "file": "assets/dino/carnotaurus.png",
+    "ext": "png",
+    "title": "File:Carnotaurus Reconstruction (2022).png",
+    "artist": "Fred Wierum",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Carnotaurus_Reconstruction_(2022).png"
   },
   {
     "name": "Giganotosaurus",
@@ -233,13 +233,13 @@
   {
     "name": "Microraptor",
     "slug": "microraptor",
-    "file": "assets/dino/microraptor.jpg",
-    "ext": "jpg",
-    "title": "File:Microraptor by durbed.jpg",
-    "artist": "Durbed",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AMicroraptor%20by%20durbed.jpg"
+    "file": "assets/dino/microraptor.png",
+    "ext": "png",
+    "title": "File:Microraptor mmartyniuk true colors.png",
+    "artist": "Matt Martyniuk and Tyrannosaure",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Microraptor_mmartyniuk_true_colors.png"
   },
   {
     "name": "Apatosaurus",
@@ -288,13 +288,13 @@
   {
     "name": "Plateosaurus",
     "slug": "plateosaurus",
-    "file": "assets/dino/plateosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Plateosaurus BW.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3APlateosaurus%20BW.jpg"
+    "file": "assets/dino/plateosaurus.png",
+    "ext": "png",
+    "title": "File:Plateosaurus TD.png",
+    "artist": "TotalDino",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Plateosaurus_TD.png"
   },
   {
     "name": "Herrerasaurus",
@@ -310,24 +310,24 @@
   {
     "name": "Eoraptor",
     "slug": "eoraptor",
-    "file": "assets/dino/eoraptor.jpg",
-    "ext": "jpg",
-    "title": "File:Eoraptor NT small.jpg",
-    "artist": "Nobu Tamura email:nobu.tamura@yahoo.com http://spinops.blogspot.com/ http://paleoexhibit.blogspot.com/",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AEoraptor%20NT%20small.jpg"
+    "file": "assets/dino/eoraptor.png",
+    "ext": "png",
+    "title": "File:Eoraptor lunensis.png",
+    "artist": "Debivort",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Eoraptor_lunensis.png"
   },
   {
     "name": "Baryonyx",
     "slug": "baryonyx",
-    "file": "assets/dino/baryonyx.jpg",
-    "ext": "jpg",
-    "title": "File:Baryonyx BW.jpg",
-    "artist": "Nobu Tamura",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
-    "source": "https://commons.wikimedia.org/wiki/File%3ABaryonyx%20BW.jpg"
+    "file": "assets/dino/baryonyx.png",
+    "ext": "png",
+    "title": "File:Life reconstruction of Baryonyx walkeri.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Baryonyx_walkeri.png"
   },
   {
     "name": "Troodon",
@@ -378,22 +378,22 @@
     "slug": "ceratosaurus",
     "file": "assets/dino/ceratosaurus.jpg",
     "ext": "jpg",
-    "title": "File:Ceratosaurus NT.jpg",
-    "artist": "NobuTamura email:nobu.tamura@yahoo.com",
+    "title": "File:Ceratosaurus nasicornis DB.jpg",
+    "artist": "Dmitry Bogdanov (DiBgd)",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ACeratosaurus%20NT.jpg"
+    "source": "https://commons.wikimedia.org/wiki/File:Ceratosaurus_nasicornis_DB.jpg"
   },
   {
     "name": "Megalosaurus",
     "slug": "megalosaurus",
-    "file": "assets/dino/megalosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Evolution in the past (Plate 16) BHL21155453.jpg",
-    "artist": "Knipe",
-    "license": "Public domain",
-    "licenseUrl": "",
-    "source": "https://commons.wikimedia.org/wiki/File%3AEvolution%20in%20the%20past%20(Plate%2016)%20BHL21155453.jpg"
+    "file": "assets/dino/megalosaurus.png",
+    "ext": "png",
+    "title": "File:Megalosaurus TD.png",
+    "artist": "TotalDino",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Megalosaurus_TD.png"
   },
   {
     "name": "Mamenchisaurus",
@@ -433,22 +433,22 @@
     "slug": "suchomimus",
     "file": "assets/dino/suchomimus.jpg",
     "ext": "jpg",
-    "title": "File:Suchomimus BW.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ASuchomimus%20BW.jpg"
+    "title": "File:Suchomimus2.jpg",
+    "artist": "Dmitry Bogdanov (ДиБгд)",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Suchomimus2.jpg"
   },
   {
     "name": "Sinosauropteryx",
     "slug": "sinosauropteryx",
-    "file": "assets/dino/sinosauropteryx.jpg",
-    "ext": "jpg",
-    "title": "File:Sinosauropteryx NT.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
+    "file": "assets/dino/sinosauropteryx.png",
+    "ext": "png",
+    "title": "File:Sinosauropteryx mmartyniuk solosml.png",
+    "artist": "Matt Martyniuk (Dinoguy2)",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ASinosauropteryx%20NT.jpg"
+    "source": "https://commons.wikimedia.org/wiki/File:Sinosauropteryx_mmartyniuk_solosml.png"
   },
   {
     "name": "Gorgosaurus",
@@ -475,13 +475,13 @@
   {
     "name": "Tarbosaurus",
     "slug": "tarbosaurus",
-    "file": "assets/dino/tarbosaurus.png",
-    "ext": "png",
-    "title": "File:Tarbosaurus baatar paleoart (2024).png",
-    "artist": "Sauroarchive",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ATarbosaurus%20baatar%20paleoart%20(2024).png"
+    "file": "assets/dino/tarbosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Tarbosaurus illustration.jpg",
+    "artist": "Mariomassone",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Tarbosaurus_illustration.jpg"
   },
   {
     "name": "Psittacosaurus",
@@ -499,22 +499,22 @@
     "slug": "pentaceratops",
     "file": "assets/dino/pentaceratops.jpg",
     "ext": "jpg",
-    "title": "File:Pentaceratops aquilonius by Nick Longrich.jpg",
-    "artist": "NickLongrich",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3APentaceratops%20aquilonius%20by%20Nick%20Longrich.jpg"
+    "title": "File:Pentaceratops BW.jpg",
+    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Pentaceratops_BW.jpg"
   },
   {
     "name": "Camarasaurus",
     "slug": "camarasaurus",
-    "file": "assets/dino/camarasaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Camarasaurus BW.jpg",
-    "artist": "Nobu Tamura (http://spinops.blogspot.com)",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ACamarasaurus%20BW.jpg"
+    "file": "assets/dino/camarasaurus.png",
+    "ext": "png",
+    "title": "File:Camarasaurus supremus.png",
+    "artist": "Jesus Gamarra",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Camarasaurus_supremus.png"
   },
   {
     "name": "Corythosaurus",
@@ -574,13 +574,13 @@
   {
     "name": "Brontosaurus",
     "slug": "brontosaurus",
-    "file": "assets/dino/brontosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Brontosaurus NT small.jpg",
-    "artist": "Nobu Tamura email:nobu.tamura@yahoo.com http://spinops.blogspot.com/",
+    "file": "assets/dino/brontosaurus.png",
+    "ext": "png",
+    "title": "File:Brontosaurus by Tom Parker.png",
+    "artist": "Tom Parker (Tomopteryx)",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ABrontosaurus%20NT%20small.jpg"
+    "source": "https://commons.wikimedia.org/wiki/File:Brontosaurus_by_Tom_Parker.png"
   },
   {
     "name": "Ouranosaurus",
@@ -647,5 +647,434 @@
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
     "source": "https://commons.wikimedia.org/wiki/File%3ASauroposeidon%20proteles%20(flipped).jpg"
+  },
+  {
+    "name": "Adisaurus",
+    "slug": "adisaurus",
+    "file": "assets/dino/adisaurus.png",
+    "ext": "png",
+    "title": "Adisaurus — custom joke image",
+    "artist": "Custom (user-provided)",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
+  },
+  {
+    "name": "Thomasaurus",
+    "slug": "thomasaurus",
+    "file": "assets/dino/thomasaurus.png",
+    "ext": "png",
+    "title": "Thomasaurus — custom joke image",
+    "artist": "Custom (user-provided)",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
+  },
+  {
+    "name": "Carcharodontosaurus",
+    "slug": "carcharodontosaurus",
+    "file": "assets/dino/carcharodontosaurus.png",
+    "ext": "png",
+    "title": "File:Carcharodontosaurus.png",
+    "artist": "Fred Wierum",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Carcharodontosaurus.png"
+  },
+  {
+    "name": "Deinocheirus",
+    "slug": "deinocheirus",
+    "file": "assets/dino/deinocheirus.png",
+    "ext": "png",
+    "title": "File:Deinocheirus Restoration.png",
+    "artist": "PaleoNeolitic",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Deinocheirus_Restoration.png"
+  },
+  {
+    "name": "Majungasaurus",
+    "slug": "majungasaurus",
+    "file": "assets/dino/majungasaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Majungasaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 2.5",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+    "source": "https://commons.wikimedia.org/wiki/File:Majungasaurus_BW.jpg"
+  },
+  {
+    "name": "Cryolophosaurus",
+    "slug": "cryolophosaurus",
+    "file": "assets/dino/cryolophosaurus.png",
+    "ext": "png",
+    "title": "File:Cryolophosaurus TD.png",
+    "artist": "TotalDino",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Cryolophosaurus_TD.png"
+  },
+  {
+    "name": "Amargasaurus",
+    "slug": "amargasaurus",
+    "file": "assets/dino/amargasaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Amargasaurus.jpg",
+    "artist": "Nobu Tamura (ArthurWeasley)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Amargasaurus.jpg"
+  },
+  {
+    "name": "Lambeosaurus",
+    "slug": "lambeosaurus",
+    "file": "assets/dino/lambeosaurus.png",
+    "ext": "png",
+    "title": "File:Life reconstruction of Lambeosaurus lambei.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Lambeosaurus_lambei.png"
+  },
+  {
+    "name": "Saurolophus",
+    "slug": "saurolophus",
+    "file": "assets/dino/saurolophus.png",
+    "ext": "png",
+    "title": "File:Saurolophus osborni.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Saurolophus_osborni.png"
+  },
+  {
+    "name": "Gigantoraptor",
+    "slug": "gigantoraptor",
+    "file": "assets/dino/gigantoraptor.png",
+    "ext": "png",
+    "title": "File:Gigantoraptor Restoration.png",
+    "artist": "PaleoNeolitic",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Gigantoraptor_Restoration.png"
+  },
+  {
+    "name": "Mapusaurus",
+    "slug": "mapusaurus",
+    "file": "assets/dino/mapusaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Mapusaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 2.5",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+    "source": "https://commons.wikimedia.org/wiki/File:Mapusaurus_BW.jpg"
+  },
+  {
+    "name": "Guanlong",
+    "slug": "guanlong",
+    "file": "assets/dino/guanlong.jpg",
+    "ext": "jpg",
+    "title": "File:Guanlong wucaii feathered.JPG",
+    "artist": "Conty",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Guanlong_wucaii_feathered.JPG"
+  },
+  {
+    "name": "Muttaburrasaurus",
+    "slug": "muttaburrasaurus",
+    "file": "assets/dino/muttaburrasaurus.png",
+    "ext": "png",
+    "title": "File:Muttaburrasaurus NT transparent.png",
+    "artist": "Nobu Tamura",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Muttaburrasaurus_NT_transparent.png"
+  },
+  {
+    "name": "Nasutoceratops",
+    "slug": "nasutoceratops",
+    "file": "assets/dino/nasutoceratops.png",
+    "ext": "png",
+    "title": "File:Nasutoceratops TD.png",
+    "artist": "TotalDino",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Nasutoceratops_TD.png"
+  },
+  {
+    "name": "Dracorex",
+    "slug": "dracorex",
+    "file": "assets/dino/dracorex.jpg",
+    "ext": "jpg",
+    "title": "File:Dracorex BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Dracorex_BW.jpg"
+  },
+  {
+    "name": "Shantungosaurus",
+    "slug": "shantungosaurus",
+    "file": "assets/dino/shantungosaurus.png",
+    "ext": "png",
+    "title": "File:Shantungosaurus giganteus.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Shantungosaurus_giganteus.png"
+  },
+  {
+    "name": "Mosasaurus",
+    "slug": "mosasaurus",
+    "file": "assets/dino/mosasaurus.png",
+    "ext": "png",
+    "title": "File:Mosasaurus missouriensis NT.png",
+    "artist": "Nobu Tamura",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Mosasaurus_missouriensis_NT.png"
+  },
+  {
+    "name": "Tylosaurus",
+    "slug": "tylosaurus",
+    "file": "assets/dino/tylosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Tylosaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Tylosaurus_BW.jpg"
+  },
+  {
+    "name": "Elasmosaurus",
+    "slug": "elasmosaurus",
+    "file": "assets/dino/elasmosaurus.png",
+    "ext": "png",
+    "title": "File:Elasmosaurus platyurus (transparent).png",
+    "artist": "Dmitry Bogdanov (DiBgd)",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Elasmosaurus_platyurus_(transparent).png"
+  },
+  {
+    "name": "Plesiosaurus",
+    "slug": "plesiosaurus",
+    "file": "assets/dino/plesiosaurus.png",
+    "ext": "png",
+    "title": "File:Plesiosaurus dolichodeirus.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Plesiosaurus_dolichodeirus.png"
+  },
+  {
+    "name": "Liopleurodon",
+    "slug": "liopleurodon",
+    "file": "assets/dino/liopleurodon.png",
+    "ext": "png",
+    "title": "File:Liopleurodon by Cody Lake.png",
+    "artist": "Cody Lake (LakePaleoArt2025)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Liopleurodon_by_Cody_Lake.png"
+  },
+  {
+    "name": "Kronosaurus",
+    "slug": "kronosaurus",
+    "file": "assets/dino/kronosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Kronosaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 2.5",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+    "source": "https://commons.wikimedia.org/wiki/File:Kronosaurus_BW.jpg"
+  },
+  {
+    "name": "Pliosaurus",
+    "slug": "pliosaurus",
+    "file": "assets/dino/pliosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:PliosaurusDB12.jpg",
+    "artist": "Dmitry Bogdanov",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:PliosaurusDB12.jpg"
+  },
+  {
+    "name": "Ichthyosaurus",
+    "slug": "ichthyosaurus",
+    "file": "assets/dino/ichthyosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Ichthyosaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Ichthyosaurus_BW.jpg"
+  },
+  {
+    "name": "Shonisaurus",
+    "slug": "shonisaurus",
+    "file": "assets/dino/shonisaurus.png",
+    "ext": "png",
+    "title": "File:Shonisaurus popularisDB.png",
+    "artist": "Dmitry Bogdanov",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Shonisaurus_popularisDB.png"
+  },
+  {
+    "name": "Temnodontosaurus",
+    "slug": "temnodontosaurus",
+    "file": "assets/dino/temnodontosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Temnodontosaurus DB.jpg",
+    "artist": "Dmitry Bogdanov (ДиБгд)",
+    "license": "Public domain",
+    "licenseUrl": "https://en.wikipedia.org/wiki/Public_domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Temnodontosaurus_DB.jpg"
+  },
+  {
+    "name": "Dolichorhynchops",
+    "slug": "dolichorhynchops",
+    "file": "assets/dino/dolichorhynchops.png",
+    "ext": "png",
+    "title": "File:Dolichorhynchops osborni.png",
+    "artist": "Connor Ashbridge",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Dolichorhynchops_osborni.png"
+  },
+  {
+    "name": "Archelon",
+    "slug": "archelon",
+    "file": "assets/dino/archelon.jpg",
+    "ext": "jpg",
+    "title": "File:Archelon1DB.jpg",
+    "artist": "Dmitry Bogdanov",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Archelon1DB.jpg"
+  },
+  {
+    "name": "Nothosaurus",
+    "slug": "nothosaurus",
+    "file": "assets/dino/nothosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Nothosaurus BW.jpg",
+    "artist": "Nobu Tamura",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Nothosaurus_BW.jpg"
+  },
+  {
+    "name": "Pteranodon",
+    "slug": "pteranodon",
+    "file": "assets/dino/pteranodon.png",
+    "ext": "png",
+    "title": "File:Pteranodon TD.png",
+    "artist": "TotalDino (Wikimedia user)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Pteranodon_TD.png"
+  },
+  {
+    "name": "Pterodactylus",
+    "slug": "pterodactylus",
+    "file": "assets/dino/pterodactylus.png",
+    "ext": "png",
+    "title": "File:Pterodactylus holotype fly mmartyniuk white background.png",
+    "artist": "Matthew P. Martyniuk",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Pterodactylus_holotype_fly_mmartyniuk_white_background.png"
+  },
+  {
+    "name": "Rhamphorhynchus",
+    "slug": "rhamphorhynchus",
+    "file": "assets/dino/rhamphorhynchus.jpg",
+    "ext": "jpg",
+    "title": "File:Rhamphorhynchus DB.jpg",
+    "artist": "Dmitry Bogdanov (ДиБгд)",
+    "license": "Public domain",
+    "licenseUrl": "https://en.wikipedia.org/wiki/Public_domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Rhamphorhynchus_DB.jpg"
+  },
+  {
+    "name": "Dimorphodon",
+    "slug": "dimorphodon",
+    "file": "assets/dino/dimorphodon.jpg",
+    "ext": "jpg",
+    "title": "File:Dimorphodon2DB white background.jpg",
+    "artist": "Dmitry Bogdanov",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Dimorphodon2DB_white_background.jpg"
+  },
+  {
+    "name": "Quetzalcoatlus",
+    "slug": "quetzalcoatlus",
+    "file": "assets/dino/quetzalcoatlus.png",
+    "ext": "png",
+    "title": "File:Quetzalcoatlus lawsoni.png",
+    "artist": "Ddinodan (Wikimedia user)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Quetzalcoatlus_lawsoni.png"
+  },
+  {
+    "name": "Dsungaripterus",
+    "slug": "dsungaripterus",
+    "file": "assets/dino/dsungaripterus.png",
+    "ext": "png",
+    "title": "File:Dsungaripterus weii.png",
+    "artist": "Connor Ashbridge (Ddinodan)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Dsungaripterus_weii.png"
+  },
+  {
+    "name": "Nyctosaurus",
+    "slug": "nyctosaurus",
+    "file": "assets/dino/nyctosaurus.jpg",
+    "ext": "jpg",
+    "title": "File:Nyctosaurus DB white background.jpg",
+    "artist": "Dmitry Bogdanov (crest fixed by FunkMonk)",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Nyctosaurus_DB_white_background.jpg"
+  },
+  {
+    "name": "Hatzegopteryx",
+    "slug": "hatzegopteryx",
+    "file": "assets/dino/hatzegopteryx.png",
+    "ext": "png",
+    "title": "File:Hatzegopteryx thambema.png",
+    "artist": "Connor Ashbridge (Ddinodan)",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Hatzegopteryx_thambema.png"
+  },
+  {
+    "name": "Ornithocheirus",
+    "slug": "ornithocheirus",
+    "file": "assets/dino/ornithocheirus.png",
+    "ext": "png",
+    "title": "File:Ornithocheirus BWtr.png",
+    "artist": "ArthurWeasley (Nobu Tamura)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Ornithocheirus_BWtr.png"
+  },
+  {
+    "name": "Eudimorphodon",
+    "slug": "eudimorphodon",
+    "file": "assets/dino/eudimorphodon.jpg",
+    "ext": "jpg",
+    "title": "File:Eudimorphodon BW.jpg",
+    "artist": "ArthurWeasley (Nobu Tamura)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Eudimorphodon_BW.jpg"
   }
 ]

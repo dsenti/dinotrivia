@@ -6,6 +6,9 @@
   // Silhouette emoji by rough group — playful, not scientific.
   const DIET_EMOJI = { carnivore: "🦖", herbivore: "🦕", omnivore: "🦴" };
   function silhouette(d) {
+    if (d.group === "pterosaur") return "🦅"; // flying reptiles
+    if (d.group === "marine") return "🐊";    // aquatic reptiles
+    if (d.group === "human") return "🧍";     // joke entries (humans)
     if (d.name === "Stegosaurus" || d.name === "Kentrosaurus") return "🦕";
     if (d.name === "Triceratops" || d.name === "Torosaurus" || d.name === "Pentaceratops") return "🦏";
     if (d.name === "Archaeopteryx" || d.name === "Microraptor") return "🐦";
@@ -21,6 +24,7 @@
   const STATS = [
     { key: "weight", cat: "Weight", q: "Which was heavier?", noun: "weight", unit: "kg", fmt: v => fmtNum(v) },
     { key: "length", cat: "Length", q: "Which was longer?", noun: "length", unit: "m", fmt: v => (v % 1 === 0 ? String(v) : v.toFixed(1)) },
+    { key: "wingspan", cat: "Wingspan", q: "Which had the bigger wingspan?", noun: "wingspan", unit: "m", fmt: v => (v % 1 === 0 ? String(v) : v.toFixed(1)) },
     { key: "mya", cat: "When they lived", q: "Which lived earlier?", noun: "age", unit: "million yrs ago", fmt: v => fmtNum(v) },
     { key: "yearNamed", cat: "Year discovered", q: "Which was named more recently?", noun: "year first named", unit: "", fmt: v => String(v) },
     { key: "teeth", cat: "Number of teeth", q: "Which had more teeth?", noun: "number of teeth", unit: "teeth", fmt: v => fmtNum(v) },

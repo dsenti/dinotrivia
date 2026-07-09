@@ -72,7 +72,10 @@
   function tileInner(t) {
     if (t.type === "image") return `<img src="${t.dino.image}" alt="${t.dino.name}" loading="lazy"
       onerror="this.replaceWith(document.createTextNode('${t.dino.silhouette}'))" />`;
-    return `<span>${t.text}</span>`;
+    // Shrink long names so they fit on one line instead of wrapping.
+    const n = t.text.length;
+    const fs = n <= 10 ? 11 : n <= 13 ? 10 : n <= 16 ? 9 : n <= 19 ? 8 : 7;
+    return `<span style="font-size:${fs}px">${t.text}</span>`;
   }
   function renderGrid() {
     els.grid.innerHTML = "";
