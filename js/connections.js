@@ -160,8 +160,10 @@
   }
 
   // Reveal the answer: lay all 16 tiles out grouped into 4 colour-coded rows.
+  // The tiles already show image/name/facts, so drop the redundant summary bars.
   function renderSolution() {
     const order = { image: 0, name: 1, fact: 2 };
+    els.solved.innerHTML = "";
     els.grid.innerHTML = "";
     for (let gi = 0; gi < GROUPS; gi++) {
       state.tiles.filter(t => t.groupId === gi)
