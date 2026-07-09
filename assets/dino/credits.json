@@ -2,13 +2,13 @@
   {
     "name": "Tyrannosaurus",
     "slug": "tyrannosaurus",
-    "file": "assets/dino/tyrannosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Rjpalmer tyrannosaurusrex (white background).jpg",
-    "artist": "RJPalmerArt",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Rjpalmer_tyrannosaurusrex_(white_background).jpg"
+    "file": "assets/dino/tyrannosaurus.png",
+    "ext": "png",
+    "title": "Tyrannosaurus — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Triceratops",
@@ -277,13 +277,13 @@
   {
     "name": "Coelophysis",
     "slug": "coelophysis",
-    "file": "assets/dino/coelophysis.jpg",
-    "ext": "jpg",
-    "title": "File:Cœlophysis bauri.jpg",
-    "artist": "Offy",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AC%C5%93lophysis%20bauri.jpg"
+    "file": "assets/dino/coelophysis.png",
+    "ext": "png",
+    "title": "Coelophysis — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Plateosaurus",
@@ -332,13 +332,13 @@
   {
     "name": "Troodon",
     "slug": "troodon",
-    "file": "assets/dino/troodon.jpg",
-    "ext": "jpg",
-    "title": "File:Troodon EF.jpg",
-    "artist": "El fosilmaníaco",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3ATroodon%20EF.jpg"
+    "file": "assets/dino/troodon.png",
+    "ext": "png",
+    "title": "Troodon — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Ornithomimus",
@@ -475,13 +475,13 @@
   {
     "name": "Tarbosaurus",
     "slug": "tarbosaurus",
-    "file": "assets/dino/tarbosaurus.jpg",
-    "ext": "jpg",
-    "title": "File:Tarbosaurus illustration.jpg",
-    "artist": "Mariomassone",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Tarbosaurus_illustration.jpg"
+    "file": "assets/dino/tarbosaurus.png",
+    "ext": "png",
+    "title": "Tarbosaurus — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Psittacosaurus",
@@ -565,11 +565,11 @@
     "slug": "yutyrannus",
     "file": "assets/dino/yutyrannus.png",
     "ext": "png",
-    "title": "File:Yutyrannus..png",
-    "artist": "McFlurry69",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File%3AYutyrannus..png"
+    "title": "Yutyrannus — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Brontosaurus",
@@ -1003,13 +1003,13 @@
   {
     "name": "Dimorphodon",
     "slug": "dimorphodon",
-    "file": "assets/dino/dimorphodon.jpg",
-    "ext": "jpg",
-    "title": "File:Dimorphodon2DB white background.jpg",
-    "artist": "Dmitry Bogdanov",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Dimorphodon2DB_white_background.jpg"
+    "file": "assets/dino/dimorphodon.png",
+    "ext": "png",
+    "title": "Dimorphodon — user-provided image",
+    "artist": "User-provided",
+    "license": "Custom",
+    "licenseUrl": "",
+    "source": ""
   },
   {
     "name": "Quetzalcoatlus",

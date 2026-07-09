@@ -53,8 +53,7 @@
     const media = d.image
       ? `<div class="dino-img"><img src="${d.image}" alt="Life reconstruction of ${d.name}" loading="lazy" decoding="async" onerror="this.parentNode.innerHTML='<span class=&quot;silhouette&quot;>${d.silhouette}</span>'" /></div>`
       : `<div class="dino-img"><span class="silhouette">${d.silhouette}</span></div>`;
-    return `<div class="period-strip"></div>
-      ${media}
+    return `${media}
       <div class="dname">${d.name}</div>
       ${statBlock}`;
   }
