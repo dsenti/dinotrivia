@@ -1,25 +1,25 @@
-/* DinoRankle — assign a dinosaur to each revealed category without seeing the
-   later ones. Each pick scores its rank in that category (1 = highest value =
-   best). Lowest total wins. #dinosaurs = #categories. Daily + practice. */
+/* DinoRankle — one dinosaur at a time (big image). Assign it to one of the
+   remaining categories WITHOUT knowing which dinosaurs come later. Each pick
+   scores the dinosaur's rank in that category (1 = highest value = best).
+   Lowest total wins. #dinosaurs = #categories. Daily + practice. */
 (function () {
   "use strict";
   const E = window.DinoEngine;
   const $ = s => document.querySelector(s);
 
-  const N = 5; // categories == dinosaurs
-  // categories a round can use: broadly covered numeric stats. `sup` is the
-  // superlative shown to the player; rank 1 always = highest raw value.
+  const N = 5;
   const CATS = {
     weight: "Heaviest", length: "Longest", height: "Tallest",
     mya: "Oldest (lived earliest)", yearNamed: "Most recently named",
     teeth: "Most teeth", topSpeed: "Fastest", skull: "Biggest head"
   };
   const CAT_POOL = Object.keys(CATS);
-  const RANK_COLORS = ["#2f9b64", "#7bb03f", "#f2a41c", "#e07a2f", "#df4f3d"]; // 1..5
+  const RANK_COLORS = ["#2f9b64", "#7bb03f", "#f2a41c", "#e07a2f", "#df4f3d"];
+  const RANK_EMOJI = ["🟩", "🟩", "🟨", "🟧", "🟥"];
 
   const els = {
-    modeSelect: $("#mode-select"), game: $("#game"), round: $("#round"), cat: $("#cat"),
-    list: $("#list"), score: $("#score"), modePill: $("#mode-pill"),
+    modeSelect: $("#mode-select"), game: $("#game"), round: $("#round"),
+    hero: $("#hero"), cats: $("#cats"), score: $("#score"), modePill: $("#mode-pill"),
     overlay: $("#overlay"), sheet: $("#sheet")
   };
   const LS = seed => "dinorankle.daily." + seed;
@@ -29,8 +29,6 @@
   const sample = (rng, arr, n) => shuffle(rng, arr).slice(0, n);
   const distinct = xs => new Set(xs).size === xs.length;
 
-  // build a valid game: N categories + N dinosaurs, all covered, distinct
-  // values per category (so ranks 1..N are unique).
   function buildGame(rng) {
     for (let t = 0; t < 300; t++) {
       const cats = sample(rng, CAT_POOL, N);
@@ -44,105 +42,111 @@
     return null;
   }
 
-  // rank of each dino within the set for a category (1 = highest value)
   function rankMap(cats, dinos) {
     const m = {};
-    cats.forEach(c => {
-      const ordered = dinos.slice().sort((a, b) => b[c] - a[c]);
-      m[c] = {};
-      ordered.forEach((d, i) => (m[c][d.name] = i + 1));
-    });
+    cats.forEach(c => { const o = dinos.slice().sort((a, b) => b[c] - a[c]); m[c] = {}; o.forEach((d, i) => (m[c][d.name] = i + 1)); });
     return m;
   }
 
-  // best achievable total: min-cost perfect matching (brute force N! perms)
-  function optimalTotal(cats, dinos, ranks) {
-    const perms = [];
-    (function permute(arr, cur) {
-      if (!arr.length) { perms.push(cur); return; }
-      for (let i = 0; i < arr.length; i++) permute(arr.slice(0, i).concat(arr.slice(i + 1)), cur.concat([arr[i]]));
-    })(dinos, []);
-    let best = Infinity;
-    for (const p of perms) {
-      let sum = 0;
-      for (let i = 0; i < cats.length; i++) sum += ranks[cats[i]][p[i].name];
-      if (sum < best) best = sum;
-    }
-    return best;
+  // optimal: min-cost perfect matching (category -> dinosaur). Brute force N!.
+  function optimal(cats, dinos, ranks) {
+    let best = Infinity, bestPerm = null;
+    (function permute(rem, cur) {
+      if (!rem.length) {
+        let sum = 0; for (let c = 0; c < cats.length; c++) sum += ranks[cats[c]][dinos[cur[c]].name];
+        if (sum < best) { best = sum; bestPerm = cur.slice(); }
+        return;
+      }
+      for (let i = 0; i < rem.length; i++) permute(rem.slice(0, i).concat(rem.slice(i + 1)), cur.concat([rem[i]]));
+    })(dinos.map((_, i) => i), []);
+    return { total: best, perm: bestPerm }; // perm[catIndex] = dinoIndex
   }
 
+  // ----- rendering -----
   function renderRound() {
-    if (!state.over && state.idx < N) {
-      const c = state.cats[state.idx];
-      els.round.textContent = "Round " + (state.idx + 1) + " of " + N;
-      els.cat.innerHTML = `<div class="eyebrow">pick the</div><h2>${CATS[c]}</h2>
-        <div class="sub">${E.STAT_BY_KEY[c].noun}</div>`;
-    }
-    els.list.innerHTML = "";
-    state.dinos.forEach((d, i) => {
-      const used = state.assignedCat[i] != null;
+    if (state.over || state.round >= N) return;
+    const d = state.dinos[state.round];
+    els.round.textContent = "Dinosaur " + (state.round + 1) + " of " + N + " · pick its category";
+    els.hero.innerHTML = `<div class="rk-hero-img"><img src="${d.image}" alt="${d.name}" loading="lazy"
+        onerror="this.replaceWith(document.createTextNode('${d.silhouette}'))" /></div>
+      <div class="rk-hero-name">${d.name}</div>`;
+    renderCats();
+  }
+
+  function renderCats() {
+    els.cats.innerHTML = "";
+    state.cats.forEach((c, ci) => {
+      const usedByDino = state.catUsed[ci];
       const b = document.createElement("button");
-      b.className = "rk-pick";
+      b.className = "rk-catbtn";
+      const used = usedByDino != null;
       b.disabled = used || state.over;
-      b.innerHTML = `<img class="thumb" src="${d.image}" alt="" loading="lazy"
-          onerror="this.replaceWith(document.createTextNode('${d.silhouette}'))" />
-        <span class="rk-name">${d.name}</span>
-        ${used ? `<span class="rk-assigned">→ ${CATS[state.cats[state.assignedCat[i]]]}</span>` : ""}`;
-      if (!used && !state.over) b.onclick = () => pick(i);
-      els.list.appendChild(b);
+      b.innerHTML = used
+        ? `<span class="rk-cat-label">${CATS[c]}</span><span class="rk-cat-taken">${state.dinos[usedByDino].name}</span>`
+        : `<span class="rk-cat-label">${CATS[c]}</span><span class="rk-cat-go">assign →</span>`;
+      if (!used && !state.over) b.onclick = () => assign(ci);
+      els.cats.appendChild(b);
     });
   }
 
-  function pick(dinoIdx) {
-    if (state.over || state.assignedCat[dinoIdx] != null) return;
-    const c = state.cats[state.idx];
-    state.assignedCat[dinoIdx] = state.idx;      // this dino handles this round's category
-    state.picks[state.idx] = state.dinos[dinoIdx];
-    state.score += state.ranks[c][state.dinos[dinoIdx].name];
+  function assign(catIdx) {
+    if (state.over || state.catUsed[catIdx] != null) return;
+    const c = state.cats[catIdx];
+    state.catUsed[catIdx] = state.round;
+    state.choices[state.round] = catIdx;
+    state.score += state.ranks[c][state.dinos[state.round].name];
     els.score.textContent = state.score;
-    state.idx++;
-    if (state.idx >= N) finish();
+    state.round++;
+    if (state.round >= N) finish();
     else renderRound();
   }
 
   function finish() {
     state.over = true;
-    if (mode === "daily") localStorage.setItem(LS(state.seed), JSON.stringify({ done: true, picks: state.picks.map(d => d.name) }));
+    if (mode === "daily") localStorage.setItem(LS(state.seed), JSON.stringify({ done: true, choices: state.choices }));
     showResult();
   }
 
   function badge(rank) { return `<span class="rk-badge" style="background:${RANK_COLORS[rank - 1]}">${rank}</span>`; }
 
-  function showResult() {
-    const rows = state.cats.map((c, i) => {
-      const d = state.picks[i], rank = state.ranks[c][d.name];
-      return `<div class="rk-result-row">
-        <span class="r-cat">${CATS[c]}</span>
-        <span class="r-dino">${d.name}</span>
-        <span class="r-rank">${badge(rank)}</span>
-      </div>`;
+  // rows for a given assignment perm[catIndex]=dinoIndex
+  function assignmentRows(perm) {
+    return state.cats.map((c, ci) => {
+      const d = state.dinos[perm[ci]], rank = state.ranks[c][d.name];
+      return `<div class="rk-result-row"><span class="r-cat">${CATS[c]}</span><span class="r-dino">${d.name}</span><span class="r-rank">${badge(rank)}</span></div>`;
     }).join("");
-    const best = state.optimal, total = state.score;
-    const perfect = total === best;
-    const emojiRow = state.cats.map((c, i) => RANK_COLORS_EMOJI(state.ranks[c][state.picks[i].name])).join("");
+  }
+
+  function showResult() {
+    const yourPerm = state.cats.map((_, ci) => state.catUsed[ci]); // dinoIndex per category
+    const total = state.score, best = state.opt.total, perfect = total === best;
+    const emojiRow = state.cats.map((c, ci) => RANK_EMOJI[state.ranks[c][state.dinos[yourPerm[ci]].name] - 1]).join("");
     const dstr = mode === "daily" ? " " + fmtDate(state.date) : "";
     const share = `DinoRankle${dstr}\nScore ${total} (best possible ${best})\n${emojiRow}\n${location.origin}${location.pathname.replace(/rankle\.html$/, "")}`;
     els.sheet.innerHTML = `
       <h2>${perfect ? "Perfect ranking! 🏆" : "Nice ranking! 🦕"}</h2>
       <div class="big">${total}</div>
       <p class="streaknote">total score · lower is better · best possible was <b>${best}</b></p>
-      <div style="text-align:left;margin:10px 0 4px">${rows}</div>
+      <div id="rk-yours" style="text-align:left;margin:10px 0 4px">${assignmentRows(yourPerm)}</div>
       <div class="emojigrid" style="font-size:22px">${emojiRow}</div>
+      ${perfect ? "" : `<button class="bigbtn endless" id="show-opt">See optimal solution</button>`}
+      <div id="rk-opt" class="hidden" style="text-align:left;margin:8px 0"></div>
       ${mode === "daily" ? `<button class="bigbtn daily" id="share">Share result</button>` : ""}
       <button class="bigbtn endless" id="again">${mode === "daily" ? "Play practice" : "New round"}</button>
       <button class="bigbtn" style="background:#b0a08c;box-shadow:0 5px 0 #8f8069" id="tohub">Back to menu</button>`;
     els.overlay.classList.remove("hidden");
     renderRound();
-    const s = $("#share"); if (s) s.onclick = () => doShare(share);
+    const so = $("#show-opt");
+    if (so) so.onclick = () => {
+      const box = $("#rk-opt");
+      box.innerHTML = `<p class="streaknote" style="margin:4px 0">Optimal assignment (score ${best}):</p>${assignmentRows(state.opt.perm)}`;
+      box.classList.remove("hidden");
+      so.remove();
+    };
+    const sh = $("#share"); if (sh) sh.onclick = () => doShare(share);
     $("#again").onclick = () => { els.overlay.classList.add("hidden"); startPractice(); };
     $("#tohub").onclick = () => (location.href = "index.html");
   }
-  function RANK_COLORS_EMOJI(r) { return ["🟩", "🟩", "🟨", "🟧", "🟥"][r - 1]; }
 
   function doShare(text) {
     if (navigator.share) navigator.share({ text: text }).catch(() => {});
@@ -154,7 +158,7 @@
 
   function begin(g, seed, date) {
     const ranks = rankMap(g.cats, g.dinos);
-    state = { cats: g.cats, dinos: g.dinos, ranks: ranks, assignedCat: g.dinos.map(() => null), picks: [], idx: 0, score: 0, over: false, seed: seed, date: date, optimal: optimalTotal(g.cats, g.dinos, ranks) };
+    state = { cats: g.cats, dinos: g.dinos, ranks: ranks, catUsed: g.cats.map(() => null), choices: [], round: 0, score: 0, over: false, seed: seed, date: date, opt: optimal(g.cats, g.dinos, ranks) };
     els.score.textContent = "0";
     els.modeSelect.classList.add("hidden");
     els.game.classList.remove("hidden");
@@ -163,12 +167,9 @@
   function startDaily() {
     mode = "daily"; els.modePill.textContent = "Daily";
     const today = new Date(), seed = E.dateSeed(today);
-    const g = buildGame(E.makeRng(seed));
-    begin(g, seed, today);
+    begin(buildGame(E.makeRng(seed)), seed, today);
     const saved = JSON.parse(localStorage.getItem(LS(seed)) || "null");
-    if (saved && saved.done) { // replay saved picks -> show result
-      saved.picks.forEach(name => { const di = state.dinos.findIndex(d => d.name === name); if (di !== -1 && state.assignedCat[di] == null) pick(di); });
-    }
+    if (saved && saved.done && Array.isArray(saved.choices)) saved.choices.forEach(ci => { if (!state.over) assign(ci); });
   }
   function startPractice() {
     mode = "practice"; els.modePill.textContent = "Practice";
@@ -177,13 +178,13 @@
 
   // test hook
   window.DinoRankleDebug = {
-    state: () => ({ idx: state.idx, over: state.over, score: state.score, optimal: state.optimal, cats: state.cats.slice(), dinos: state.dinos.map(d => d.name), ranks: state.ranks }),
-    pickBest: () => { // pick the dino with best (lowest) rank still available for the current category
-      const c = state.cats[state.idx]; let bi = -1, br = Infinity;
-      state.dinos.forEach((d, i) => { if (state.assignedCat[i] == null && state.ranks[c][d.name] < br) { br = state.ranks[c][d.name]; bi = i; } });
-      pick(bi);
+    state: () => ({ round: state.round, over: state.over, score: state.score, optimal: state.opt.total, cats: state.cats.slice(), dinos: state.dinos.map(d => d.name), ranks: state.ranks }),
+    assignBest: () => { // assign current dino to the available category where it ranks best
+      const d = state.dinos[state.round]; let bc = -1, br = Infinity;
+      state.cats.forEach((c, ci) => { if (state.catUsed[ci] == null && state.ranks[c][d.name] < br) { br = state.ranks[c][d.name]; bc = ci; } });
+      assign(bc);
     },
-    pickFirstAvailable: () => { const i = state.assignedCat.findIndex(x => x == null); pick(i); }
+    assignFirst: () => { const ci = state.catUsed.findIndex(x => x == null); assign(ci); }
   };
 
   E.load().then(() => {

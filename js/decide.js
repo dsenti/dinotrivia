@@ -21,7 +21,8 @@
     overlay: $("#overlay"),
     sheet: $("#sheet"),
     dailyCat: $("#daily-cat"),
-    next: $("#next-btn")
+    next: $("#next-btn"),
+    arena: $(".arena")
   };
 
   const LS = {
@@ -113,10 +114,15 @@
 
   // ---------- Next button ----------
   function showNext(onNext) {
+    if (els.arena) els.arena.classList.add("answered");
     els.next.classList.remove("hidden");
     els.next.onclick = () => { hideNext(); onNext(); };
   }
-  function hideNext() { els.next.classList.add("hidden"); els.next.onclick = null; }
+  function hideNext() {
+    if (els.arena) els.arena.classList.remove("answered");
+    els.next.classList.add("hidden");
+    els.next.onclick = null;
+  }
 
   // ---------- ENDLESS ----------
   function startEndless() {

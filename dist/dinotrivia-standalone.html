@@ -170,7 +170,17 @@ body {
 .prompt { text-align: center; font-size: 16.5px; color: var(--ink-soft); margin-bottom: 8px; min-height: 22px; }
 .prompt b { color: var(--ink); }
 
-.arena { display: flex; flex-direction: column; gap: 11px; flex: 1; }
+.arena { display: flex; flex-direction: column; gap: 11px; flex: 1; position: relative; }
+/* Next appears centered over the VS badge so you tap between the two images
+   without scrolling; the VS hides while it's shown. */
+.arena.answered .vs { visibility: hidden; }
+#next-btn {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 6; border: none; cursor: pointer; font-family: inherit; font-weight: 700;
+  color: #fff; background: var(--amber); box-shadow: 0 5px 0 var(--amber-d);
+  font-size: 18px; padding: 13px 30px; border-radius: 999px; white-space: nowrap;
+}
+#next-btn:active { transform: translate(-50%, -50%) translateY(3px); box-shadow: 0 2px 0 var(--amber-d); }
 .dino {
   background: var(--card); border: 1px solid var(--card-line);
   border-radius: var(--radius); box-shadow: var(--shadow);
@@ -258,6 +268,69 @@ body {
 .footer a { color: var(--ink-soft); }
 
 button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); outline-offset: 2px; }
+
+/* ============ DinoConnections ============ */
+#solved { display: flex; flex-direction: column; gap: 7px; margin-bottom: 9px; }
+.csolved { border-radius: 13px; padding: 9px 12px; color: #fff; text-align: center; box-shadow: var(--shadow); }
+.csolved .cs-name { font-weight: 700; font-size: 16px; }
+.csolved .cs-facts { font-size: 11.5px; opacity: .92; margin-top: 1px; }
+
+.cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.ctile {
+  aspect-ratio: 1 / 1; border: 1px solid var(--card-line); background: var(--card);
+  border-radius: 12px; cursor: pointer; padding: 4px; overflow: hidden;
+  display: grid; place-items: center; text-align: center; font-family: inherit;
+  font-weight: 600; font-size: 11px; line-height: 1.15; color: var(--ink);
+  box-shadow: 0 3px 0 rgba(0,0,0,.07);
+}
+.ctile span { display: block; padding: 2px; word-break: break-word; }
+.ctile.img { padding: 0; background: linear-gradient(180deg, #dfeaf1, #e7ddc7); }
+.ctile.img img { width: 100%; height: 100%; object-fit: contain; }
+.ctile.sel { border-color: var(--ink); box-shadow: 0 0 0 3px var(--ink); transform: translateY(1px); }
+.ctile.shake { animation: shake .5s ease; }
+
+.cbtns { display: flex; gap: 9px; margin-top: 14px; }
+.cbtn {
+  flex: 1; border: none; cursor: pointer; font-family: inherit; font-weight: 700;
+  font-size: 15px; padding: 13px 8px; border-radius: 13px;
+}
+.cbtn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--card-line); box-shadow: 0 3px 0 rgba(0,0,0,.08); }
+.cbtn.solid { background: var(--amber); color: #fff; box-shadow: 0 4px 0 var(--amber-d); }
+.cbtn:disabled { opacity: .45; }
+.cbtn:active { transform: translateY(2px); }
+
+/* ============ DinoRankle ============ */
+.rk-round { text-align: center; color: var(--ink-soft); font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+.rk-hero { text-align: center; margin-bottom: 6px; }
+.rk-hero-img {
+  height: clamp(150px, 30vh, 260px); border-radius: 16px; overflow: hidden; padding: 10px;
+  display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05), var(--shadow);
+  background: linear-gradient(180deg, #dfeaf1 0%, #eef1e6 55%, #e7ddc7 100%);
+}
+.rk-hero-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.rk-hero-name { font-size: 26px; font-weight: 700; margin-top: 8px; letter-spacing: -0.02em; }
+.rk-prompt { text-align: center; color: var(--ink-soft); font-size: 13.5px; margin: 4px 0 10px; }
+.rk-prompt b { color: var(--ink); }
+.rk-cats { display: flex; flex-direction: column; gap: 8px; }
+.rk-catbtn {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  background: var(--card); border: 1px solid var(--card-line); border-radius: 13px;
+  padding: 13px 15px; cursor: pointer; font-family: inherit; color: var(--ink);
+  box-shadow: 0 4px 0 rgba(0,0,0,.07);
+}
+.rk-catbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.1); }
+.rk-catbtn:disabled { opacity: .5; cursor: default; box-shadow: none; }
+.rk-cat-label { font-weight: 700; font-size: 16px; }
+.rk-cat-go { font-size: 13px; font-weight: 700; color: var(--amber-d); }
+.rk-cat-taken { font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+
+.rk-result-row { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px solid var(--card-line); font-size: 14px; }
+.rk-result-row:last-child { border-bottom: none; }
+.rk-result-row .r-cat { flex: 1; }
+.rk-result-row .r-dino { font-weight: 700; }
+.rk-result-row .r-rank { font-weight: 700; font-variant-numeric: tabular-nums; }
+.rk-badge { display:inline-block; min-width: 22px; text-align:center; border-radius:999px; padding:1px 7px; color:#fff; font-size:12px; }
+
 .hidden { display: none !important; }
 
 /* standalone credits view */
@@ -326,8 +399,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); ou
       <div class="dino" id="left"></div>
       <div class="vs">VS</div>
       <div class="dino" id="right"></div>
+      <button class="hidden" id="next-btn">Next ▶</button>
     </div>
-    <button class="bigbtn daily hidden" id="next-btn">Next ▶</button>
   </div>
 
   <div id="credits" class="hidden">
@@ -507,7 +580,8 @@ window.__spa = {
     overlay: $("#overlay"),
     sheet: $("#sheet"),
     dailyCat: $("#daily-cat"),
-    next: $("#next-btn")
+    next: $("#next-btn"),
+    arena: $(".arena")
   };
 
   const LS = {
@@ -599,10 +673,15 @@ window.__spa = {
 
   // ---------- Next button ----------
   function showNext(onNext) {
+    if (els.arena) els.arena.classList.add("answered");
     els.next.classList.remove("hidden");
     els.next.onclick = () => { hideNext(); onNext(); };
   }
-  function hideNext() { els.next.classList.add("hidden"); els.next.onclick = null; }
+  function hideNext() {
+    if (els.arena) els.arena.classList.remove("answered");
+    els.next.classList.add("hidden");
+    els.next.onclick = null;
+  }
 
   // ---------- ENDLESS ----------
   function startEndless() {

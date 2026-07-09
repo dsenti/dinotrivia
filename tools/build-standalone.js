@@ -108,8 +108,8 @@ ${css}
       <div class="dino" id="left"></div>
       <div class="vs">VS</div>
       <div class="dino" id="right"></div>
+      <button class="hidden" id="next-btn">Next ▶</button>
     </div>
-    <button class="bigbtn daily hidden" id="next-btn">Next ▶</button>
   </div>
 
   <div id="credits" class="hidden">
