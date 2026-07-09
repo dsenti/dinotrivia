@@ -158,8 +158,33 @@
     setTimeout(() => { els.submit.disabled = true; renderGrid(); }, 250);
   }
 
+  // Reveal the answer: lay all 16 tiles out grouped into 4 colour-coded rows.
+  function renderSolution() {
+    const order = { image: 0, name: 1, fact: 2 };
+    els.grid.innerHTML = "";
+    for (let gi = 0; gi < GROUPS; gi++) {
+      state.tiles.filter(t => t.groupId === gi)
+        .sort((a, b) => order[a.type] - order[b.type])
+        .forEach(t => {
+          const el = document.createElement("div");
+          el.className = "ctile sol" + (t.type === "image" ? " img" : "");
+          el.style.borderColor = COLORS[gi];
+          if (t.type === "image") el.style.boxShadow = "0 0 0 3px " + COLORS[gi];
+          else { el.style.background = COLORS[gi]; el.style.color = "#fff"; }
+          el.innerHTML = tileInner(t);
+          els.grid.appendChild(el);
+        });
+    }
+    const bar = document.querySelector(".cbtns");
+    if (bar) {
+      bar.innerHTML = '<button class="cbtn solid" id="backres">See results</button>';
+      document.querySelector("#backres").onclick = () => showResult(state.won);
+    }
+  }
+
   function finish(won) {
     state.over = true;
+    state.won = won;
     // reveal any unsolved groups
     for (let gi = 0; gi < GROUPS; gi++) if (state.solvedGroups.indexOf(gi) === -1) state.solvedGroups.push(gi);
     state.tiles.forEach(t => (t.solved = true));
@@ -182,10 +207,12 @@
       <div class="big">${state.solvedGroups.length}/${GROUPS}</div>
       <p class="streaknote">${won ? "Solved with " + state.mistakes + " mistake" + (state.mistakes === 1 ? "" : "s") + "." : "Better luck next time."}</p>
       <div class="emojigrid" style="font-size:18px;line-height:1.3">${grid.replace(/\n/g, "<br>")}</div>
+      ${!won ? `<button class="bigbtn" style="background:#6a7b52;box-shadow:0 5px 0 #55643f" id="showsol">Show solution</button>` : ""}
       ${mode === "daily" ? `<button class="bigbtn daily" id="share">Share result</button>` : ""}
       <button class="bigbtn endless" id="again">${mode === "daily" ? "Play practice" : "New puzzle"}</button>
       <button class="bigbtn" style="background:#b0a08c;box-shadow:0 5px 0 #8f8069" id="tohub">Back to menu</button>`;
     els.overlay.classList.remove("hidden");
+    const sol = $("#showsol"); if (sol) sol.onclick = () => { els.overlay.classList.add("hidden"); renderSolution(); };
     const s = $("#share"); if (s) s.onclick = () => doShare(share);
     $("#again").onclick = () => { els.overlay.classList.add("hidden"); startPractice(); };
     $("#tohub").onclick = () => (location.href = "index.html");
