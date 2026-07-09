@@ -46,26 +46,45 @@
   }
   const FACT_KEYS = ["weight", "length", "height", "teeth", "topSpeed", "yearNamed", "fossilSpecimens", "skull"];
 
-  function buildPuzzle(rng) {
+  // One puzzle attempt. Each of the 4 groups must yield exactly PER_GROUP tiles
+  // (image + name + 2 facts). Fact texts are kept globally unique so no tile is
+  // ambiguous. When `strict`, a group that can't reach PER_GROUP unique tiles
+  // (e.g. two dinos with identical stats — the joke humans) aborts the attempt
+  // by returning null so the caller resamples. When not strict, duplicate facts
+  // are allowed as a last resort so the grid is always full (16 tiles).
+  function buildAttempt(rng, strict) {
     const pool = E.all.filter(d => d.image);
     const dinos = sample(rng, pool, GROUPS);
     const usedText = new Set(dinos.map(d => d.name.toLowerCase()));
     const tiles = [];
-    dinos.forEach((d, gi) => {
-      tiles.push({ type: "image", groupId: gi, dino: d });
-      tiles.push({ type: "name", groupId: gi, text: d.name });
+    for (let gi = 0; gi < dinos.length; gi++) {
+      const d = dinos[gi];
+      const group = [
+        { type: "image", groupId: gi, dino: d },
+        { type: "name", groupId: gi, text: d.name }
+      ];
       const keys = shuffle(rng, FACT_KEYS.filter(k => d[k] != null && !(k === "teeth" && d[k] === 0)));
-      let added = 0;
       for (const k of keys) {
-        if (added === PER_GROUP - 2) break;
+        if (group.length === PER_GROUP) break;
         const t = factText(k, d);
-        if (usedText.has(t.toLowerCase())) continue;
+        if (strict && usedText.has(t.toLowerCase())) continue;
         usedText.add(t.toLowerCase());
-        tiles.push({ type: "fact", groupId: gi, text: t });
-        added++;
+        group.push({ type: "fact", groupId: gi, text: t });
       }
-    });
+      if (group.length < PER_GROUP) {
+        if (strict) return null;      // resample: this dino set can't fill uniquely
+      }
+      tiles.push(...group);
+    }
     return { dinos, tiles: shuffle(rng, tiles) };
+  }
+
+  function buildPuzzle(rng) {
+    for (let i = 0; i < 300; i++) {
+      const p = buildAttempt(rng, true);
+      if (p) return p;
+    }
+    return buildAttempt(rng, false); // fallback: guarantees a full 16-tile grid
   }
 
   // ----- rendering -----
