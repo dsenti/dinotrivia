@@ -12,7 +12,8 @@
   const els = {
     modeSelect: $("#mode-select"), game: $("#game"), grid: $("#grid"), solved: $("#solved"),
     lives: $("#lives"), modePill: $("#mode-pill"), submit: $("#submit"),
-    shuffle: $("#shuffle"), deselect: $("#deselect"), overlay: $("#overlay"), sheet: $("#sheet")
+    shuffle: $("#shuffle"), deselect: $("#deselect"), overlay: $("#overlay"), sheet: $("#sheet"),
+    away: $("#away")
   };
   const LS = seed => "dinoconn.daily." + seed;
 
@@ -139,6 +140,7 @@
       state.solvedGroups.push(gid);
       state.selected.clear();
       els.submit.disabled = true;
+      hideAway();
       renderSolved(); renderGrid();
       if (state.solvedGroups.length === GROUPS) finish(true);
     } else {
@@ -146,8 +148,23 @@
       els.lives.textContent = MAX_MISTAKES - state.mistakes;
       flashWrong(idxs);
       if (state.mistakes >= MAX_MISTAKES) finish(false);
+      else showAway(gids);
     }
   }
+
+  // "How close was that?" — the guess is N away where N = tiles that would
+  // have to change to complete the best-represented group in the selection.
+  let awayT;
+  function showAway(gids) {
+    const counts = {};
+    gids.forEach(g => { counts[g] = (counts[g] || 0) + 1; });
+    const away = PER_GROUP - Math.max(...Object.values(counts));
+    els.away.textContent = ["", "One", "Two", "Three"][away] + " away!";
+    els.away.classList.add("show");
+    clearTimeout(awayT);
+    awayT = setTimeout(() => els.away.classList.remove("show"), 6000);
+  }
+  function hideAway() { clearTimeout(awayT); els.away.classList.remove("show"); }
 
   function flashWrong(idxs) {
     const btns = els.grid.querySelectorAll(".ctile");
@@ -196,6 +213,7 @@
   function finish(won) {
     state.over = true;
     state.won = won;
+    hideAway();
     // Real groups solved by the player = number of correct guesses (all 4 same
     // group). Derived from guesses so it's right both live and on daily replay.
     state.solvedCount = state.guesses.filter(g => g.length === PER_GROUP && g.every(x => x === g[0])).length;
@@ -252,6 +270,7 @@
     state = { dinos: p.dinos, tiles: p.tiles, selected: new Set(), solvedGroups: [], mistakes: 0, guesses: [], over: false, seed: seed, date: date };
     els.lives.textContent = MAX_MISTAKES;
     els.submit.disabled = true;
+    hideAway();
     els.modeSelect.classList.add("hidden");
     els.game.classList.remove("hidden");
     // Restore the play controls in case the previous game left the solution

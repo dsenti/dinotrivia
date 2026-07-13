@@ -283,6 +283,13 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--cretaceous); ou
 .cbtn:disabled { opacity: .45; }
 .cbtn:active { transform: translateY(2px); }
 
+.caway {
+  min-height: 26px; margin-top: 12px; text-align: center; pointer-events: none;
+  font-weight: 700; font-size: 14px; color: var(--ink-soft);
+  opacity: 0; transition: opacity .35s ease;
+}
+.caway.show { opacity: 1; }
+
 /* ============ DinoRankle ============ */
 .rk-round { text-align: center; color: var(--ink-soft); font-size: 13px; margin-bottom: 6px; font-weight: 600; }
 .rk-hero { text-align: center; margin-bottom: 6px; }
