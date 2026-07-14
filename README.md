@@ -16,7 +16,17 @@ Hosts for free on GitHub Pages.
   - **Endless Streak** — keep going until you slip up; best streak saved locally.
   - The two dinosaurs shown always differ on the stat in play, so a tie is impossible.
 
-More games (Dinodle, DinoRankle, DinoConnect) are stubbed on the home page.
+- **DinoConnections** — Group each dinosaur's four tiles (picture, name and two
+  facts) into its four sets. Daily + Practice, four mistakes allowed.
+
+- **DinoWithWhom** — A geological period is named (Triassic, Jurassic or
+  Cretaceous); tap the dinosaurs from the grid that lived in it. You're told how
+  many to find and get five wrong guesses. The end-of-round reveal colours every
+  tile by its true period: orange = Triassic, green = Jurassic, blue = Cretaceous.
+  - **Daily Puzzle** — date-seeded, same for everyone, with a shareable result.
+  - **Practice** — a fresh random puzzle every time.
+
+More games (Dinodle) are stubbed on the home page.
 
 ## Run locally
 
@@ -25,6 +35,14 @@ It fetches `data/dinosaurs.json`, so open it through a web server (not `file://`
 ```bash
 python3 -m http.server 8199
 # then visit http://localhost:8199
+```
+
+On **Python 3.6** `http.server` is single-threaded, so it serves the page's
+images and data one request at a time and the site can feel very slow to load.
+Python 3.7+ threads requests automatically; on 3.6 use a threaded one-liner:
+
+```bash
+python -c "import http.server,socketserver;socketserver.ThreadingTCPServer.allow_reuse_address=True;socketserver.ThreadingTCPServer(('',8199),http.server.SimpleHTTPRequestHandler).serve_forever()"
 ```
 
 ## Deploy (GitHub Pages)
@@ -39,6 +57,11 @@ published paleontological estimates chosen so the *relative order* is trustworth
 for a trivia game. `null` means a stat isn't confidently documented for that
 dinosaur — it's simply never used in a comparison involving it (no invented numbers).
 This dataset is the shared foundation for future games.
+
+Each land/marine/flying genus also carries a time range — `existingSince` and
+`exitedUntil` (mya) — powering DinoWithWhom's overlap logic. Both are `null`
+where a range isn't confidently documented (e.g. the human joke entries), and
+those dinosaurs are skipped by that game.
 
 ## Images
 
