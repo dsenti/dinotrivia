@@ -1,0 +1,3 @@
+I want to create  a new game mode, for that one we need new informations for each dinosaur in our dataset. We want to know from when to when it existed. So we will have 2 dates for each idinosaur existing_since "152mya" exited_until "148mya" for example.
+and then also as a daily mode you will have a 4x4 set of the different dinosaurs with pictures of them and underneath their name. and one of them will be framed green, this is the one that is selcted.
+the goal is to find the other dinosaurs that existed during an overlapping period. the player in total can guess 3 times wrongly and he also can know how many he has to find.
