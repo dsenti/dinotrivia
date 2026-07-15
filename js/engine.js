@@ -97,6 +97,27 @@
     return DINOS.filter(d => d[key] !== null && d[key] !== undefined);
   }
 
+  // Dinos with a confidently documented time range (both endpoints present),
+  // the pool the DinoWithWhom game draws from. Mirrors withStat().
+  function withTimeRange() {
+    return DINOS.filter(d => d.existingSince != null && d.exitedUntil != null);
+  }
+
+  /* Classify dino `b`'s time range relative to reference `a`. Ranges are
+     [exitedUntil, existingSince] in mya (bigger = earlier). Both dinos must
+     have non-null ranges. Two ranges that don't intersect are strictly
+     ordered, so the result is exactly one of:
+       "same-time" — the ranges overlap (they could have met)
+       "earlier"   — b went extinct before a appeared (b is older)
+       "later"     — b appeared after a went extinct (b is younger) */
+  function classifyOverlap(a, b) {
+    // overlap iff each starts (in mya) no later than the other ends
+    if (a.existingSince >= b.exitedUntil && b.existingSince >= a.exitedUntil) return "same-time";
+    // no overlap: if b's oldest point (existingSince) is already younger (smaller
+    // mya) than a's youngest point (exitedUntil), b appeared after a → "later".
+    return b.existingSince < a.exitedUntil ? "later" : "earlier";
+  }
+
   const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
 
   /* Build one round: {stat, left, right} where left & right have DIFFERENT
@@ -127,7 +148,7 @@
   }
 
   global.DinoEngine = {
-    STATS, STAT_BY_KEY, load, withStat, makeRound, makeRng, dateSeed, silhouette, slugify,
+    STATS, STAT_BY_KEY, load, withStat, withTimeRange, classifyOverlap, makeRound, makeRng, dateSeed, silhouette, slugify,
     get all() { return DINOS; },
     get credits() { return CREDITS; }
   };
